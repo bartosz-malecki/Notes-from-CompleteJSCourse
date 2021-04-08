@@ -316,5 +316,14 @@ const poll = {
       answer < this.options.length &&
       this.answers[answer]++;
   },
+  displayResults(type) {
+    if (type === 'array') {
+      console.log(this.answers);
+    } else (type === 'string') {}
+    
+  }
 };
-poll.registerNewAnswer();
+// poll.registerNewAnswer();
+document
+  .querySelector(".poll")
+  .addEventListener("click", poll.registerNewAnswer.bind(poll));
