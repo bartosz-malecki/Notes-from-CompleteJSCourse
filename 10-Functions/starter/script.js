@@ -186,7 +186,7 @@ const book = lufthansa.book; // kopiujemy funkcje book z obiektu lufthasna
 // book(23, 'Sarah Williams'); // jest zwykłym wywołaniem funkcji, więc this pokazuje na undefined
 // funkcja book nie jest tutaj już metodą z obiektu. Jest zwykłą funkcją, kopią ale juz nie tamtą metodą.
 
-// Call method
+/////////// Call method
 
 // zadziała
 book.call(eurowings, 123, 'Norah Jones'); // pierwszy argument jest dokładnie tym na co chcieliśmy wskazac this., a potem reszta.
@@ -199,7 +199,7 @@ console.log(lufthansa);
 
 // możemy dodawać kolejne obiekty, ale trzeba pamiętać o zachowaniu tych samych nazw właściwości
 
-// Apply method
+/////////////// Apply method
 // robi to samo co call, z tą różnicą, że nie otrzymuje listy argumentów po słowie this, tylko pobierze argumenty z tablicy i przekaże je do funkcji
 const flightData = [583, 'Józek Pan'];
 book.apply(eurowings, flightData);
@@ -207,7 +207,7 @@ console.log(eurowings);
 // jednak nie jest używana we współczesnym JS bo mamy lepszy sposób na to samo..:
 book.call(eurowings, ...flightData); // daje taki sam wynik
 
-// Bind method
+/////////////// Bind method
 // Różni się od call tym, że nie wywołuje od razu funkcji, tylko zwraca nową w której this jest powiązane.
 // book.call(eurowings, 123, 'Norah Jones');
 
@@ -315,15 +315,25 @@ const poll = {
     typeof answer === "number" &&
       answer < this.options.length &&
       this.answers[answer]++;
+    this.displayResults();
+    this.displayResults("string");
   },
-  displayResults(type) {
-    if (type === 'array') {
+  displayResults(type = "array") {
+    if (type === "array") {
       console.log(this.answers);
-    } else (type === 'string') {}
-    
-  }
+    } else if (type === "string") {
+      console.log(`Poll results are ${this.answers.join(", ")}`);
+    }
+  },
 };
-// poll.registerNewAnswer();
+
 document
   .querySelector(".poll")
   .addEventListener("click", poll.registerNewAnswer.bind(poll));
+
+poll.displayResults.call({ answers: [5, 2, 3] }, "string");
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, "string");
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
+// potrzebujemy obiektu który będzie zawierał własność answers
+// [5, 2, 3]
+// [1, 5, 3, 9, 6, 1]
