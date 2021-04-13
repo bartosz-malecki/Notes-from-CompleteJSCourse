@@ -200,6 +200,7 @@ console.log(lufthansa);
 // możemy dodawać kolejne obiekty, ale trzeba pamiętać o zachowaniu tych samych nazw właściwości
 
 /////////////// Apply method
+
 // robi to samo co call, z tą różnicą, że nie otrzymuje listy argumentów po słowie this, tylko pobierze argumenty z tablicy i przekaże je do funkcji
 const flightData = [583, 'Józek Pan'];
 book.apply(eurowings, flightData);
@@ -208,6 +209,7 @@ console.log(eurowings);
 book.call(eurowings, ...flightData); // daje taki sam wynik
 
 /////////////// Bind method
+
 // Różni się od call tym, że nie wywołuje od razu funkcji, tylko zwraca nową w której this jest powiązane.
 // book.call(eurowings, 123, 'Norah Jones');
 
@@ -298,42 +300,69 @@ BONUS TEST DATA 2: [1, 5, 3, 9, 6, 1]
 
 GOOD LUCK 😀
 */
-
+/*
 const poll = {
   question: "What is your favourite programming language?",
   options: ["0: JavaScript", "1: Python", "2: Rust", "3: C++"],
   // This generates [0, 0, 0, 0]. More in the next section 😃
   answers: new Array(4).fill(0),
   registerNewAnswer() {
-    // get answer
+    // register
     const answer = Number(
       prompt(
         `${this.question}\n${this.options.join("\n")}\n(Write option number)`
       )
     );
-    // register answer
+    // update
     typeof answer === "number" &&
-      answer < this.options.length &&
+      answer < this.answers.length &&
       this.answers[answer]++;
-    this.displayResults();
-    this.displayResults("string");
+    poll.displayResults();
   },
   displayResults(type = "array") {
     if (type === "array") {
       console.log(this.answers);
     } else if (type === "string") {
-      console.log(`Poll results are ${this.answers.join(", ")}`);
+      console.log(`Poll results are ${this.answers.join(",")}`);
     }
   },
 };
-
 document
   .querySelector(".poll")
   .addEventListener("click", poll.registerNewAnswer.bind(poll));
 
 poll.displayResults.call({ answers: [5, 2, 3] }, "string");
-poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, "string");
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
-// potrzebujemy obiektu który będzie zawierał własność answers
+
 // [5, 2, 3]
 // [1, 5, 3, 9, 6, 1]
+*/
+
+/////////// Immediately Invoked Function Expressions (IIFE)
+
+// IIFE - czyli natychmiast wywołane wyrażenie funkcyjne. Gdy potrzebna nam funkcja którą wywołamy tylko raz, albo inaczej funkcja która zniknia nam zaraz po jej wywołaniu.
+
+// Moglibyśmy napisać normalnie funkcje i potem wywołać ją tylko raz, ale nie o to chodzi. Chcemy wywołać natychmiast funkcje i nie musimy jej nawet zapisywać.
+
+(function () {
+  console.log("This will never run again");
+  const isPrivate = 23;
+})();
+
+// console.log(isPrivate); // niezadziała
+
+// wystarczy wrzucić stwierdzenie w nawiasy i JS traktuje to jako wyrażenie funkcji i zadziała. Potem natychmiast ją wywołujemy. Nie musimy dawać żadnej nazwy funkcji.
+
+// Działa to też w arrow func
+(() => console.log("This will never run again"))();
+
+// Ma to związek z zakresem oraz prywatnością zmiennych. W przypadku zakresu utworzonego przez funkcję mówimy, że wszystkie dane definioweane wewnątrz zakresu są prywatne. Ważne jest ukrywać dane przed przypadkowym nadpisaniem, a zakresy są dobrym narzędziem do tego. Dlatego też wymyslono IIFE i to nie jest cecha języka JS, tylko wzór wymyślony przez niektórych progamistów.
+
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+// console.log(isPrivate);
+console.log(notPrivate);
+
+// IIFE teraz juz jest praktycznie nie używany, ponieważ wystarczy utworzyć blok jak wyżej i juz nasze dane są chronione. Nie ma potrzeby tworzenia funkcji do tego. Jednak jeżeli faktycznie dana funkcja ma byc wykonana tylko raz, to wtedy IIFE się przydaje.
