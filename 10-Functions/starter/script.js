@@ -337,7 +337,7 @@ poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
 // [5, 2, 3]
 // [1, 5, 3, 9, 6, 1]
 */
-
+/*
 /////////// Immediately Invoked Function Expressions (IIFE)
 
 // IIFE - czyli natychmiast wywołane wyrażenie funkcyjne. Gdy potrzebna nam funkcja którą wywołamy tylko raz, albo inaczej funkcja która zniknia nam zaraz po jej wywołaniu.
@@ -366,3 +366,51 @@ poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
 console.log(notPrivate);
 
 // IIFE teraz juz jest praktycznie nie używany, ponieważ wystarczy utworzyć blok jak wyżej i juz nasze dane są chronione. Nie ma potrzeby tworzenia funkcji do tego. Jednak jeżeli faktycznie dana funkcja ma byc wykonana tylko raz, to wtedy IIFE się przydaje.
+*/
+
+//////////////// Closures (zamknięcia)
+
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+const booker = secureBooking();
+
+// krok po kroku jak tworzymy closure:
+// funkcja secureBooking znajduje sie w Global environement Context, czyli global scope obejmuje tą funkcję. Następnie, gdy wywołujemy, nowy kontekst wykonywania umieszczany jest na szczycie call stacku (tu wykonują się funkcje).
+// (każdy kontekst wykonania (EC) ma zmienne środowisko, które zawiera jego zmienne lokalne. w tym przypadku tylko passengerCount)
+// to zmienne środowisko jest również zakresem tej funkcji. Zatem passengerCout  miesci sie w lokal scope, ale ma dostep oczywiscie do zakresów nadrzednych, w tym wypadku jest to tylko global scope.
+// w nastepnym wierszu funkcji, zwracana jest nowa funkcja która zostanie zapisana w zmiennej.
+// zatem teraz Global EC zawiera też zmienną booker.
+// gdy secureBooking powróci, jego EC (passengerCount) wyskoczy ze stosu i zniknie!
+
+booker();
+booker();
+booker();
+
+// jak to możliwe, że to działa skoro niby EC juz nie ma?
+// Booker jest po prostu funkcją, która istnieje w środowisku globalnym. środowisko w którym jest cały wyżej kod, nie jest już aktywne, znikneło. Jednak cały czas jakoś booker ma dojście do zmiennych, które były obecne w czasie, gdy funkcja została utworzona. I to własnie robi clousre.
+
+// Możemy ppwiedzieć, że clousre pełni funkcję - zapamiętaj wszystkie zmienne w miejscu narodzin funkcji
+
+// Możemy sobie w tym przykładzie wyobrazic secureBooking jako miejsce narodzin funkcji. Więc funkcja booker pamieta wszystko w miejscu urodzenia od czasu jej utworzenia.
+
+// Funkcja ma zawsze dostep do środowiska zmiennych  (VE) kontekstu wykonania EC, w którym została utworzona, nawet po zniknięciu tego EC.
+// Closure jest więc tym VE przypisanym do funkcji dokładnie tak jak było w czasie i miejscu, w którym została utworzona.
+
+// Funkcja booker ma dostęp do zmiennej passengerCount ponieważ jest ona zdefiniowana w zakresie, w którym faktycznie została utworzona funkcja booker
+
+// Podsumowanie, definicje:
+// Clousure jest zamykane w środowisku zmiennych VT kontestu wykonania EC, w którym została utworzona funkcja. Nawet po zniknięciu EC (nawet po zwróceniu funkcji).
+
+// Clousure daje funkcji dostęp do wszystkich zmiennych funkcji nadrzędnej (funkcji w której jest zdefiniowana), nawet po zwróceniu tej funkcji nadrzędnej. Funkcja zachowuje odniesienie do swojego zakresu zewnętrznego, nawet po zniknięciu tego zakresu, co zachowuje scope chain przez cały czas.
+
+// Clousure zapewnia, że funkcja nigdy nie straci połączenia ze zmiennymi, które istniały w miejscu urodzenia funkcji. Pamięta zmienne nawet po zniknięciu ich miejsca narodzin. Cos na zasadzie, że człowiek nigdy nie traci połączenia ze swoim rodzinnym miastem. Osoba jest funkcją, miasto jest parent scope i funkcja nie traci połączenia ze zmiennymi w tym parent scope.
+
+// Albo clousure jest jak plecak który funkcja wszędzie nosi. A w tym plecaku są wszystkie zmienne, które były obecne w środowisku w którym funkcja została utworzona. Wtedy gdy funkcja nie moze znaleść zmiennej w swoim zakresie funkcji, JS przeszuka plecak i pobierze brakującą zmienną.
+
+// Nie musimy ręcznie tworzyć zamknięć. JS robi to automatycznie. Nie ma też jawnego dostępu do zamkniętych zmiennych, bo zamknięcia nie są namacalne jak np obiekty i nie umożliwiają nam dostepu. Nie możemy sobie od tak pobrać z niego zmiennych, poniweaż jest to tylko wewnętrzną właściwości funkckcji. Możemy zaobserwować zamkniecie,gdy w dziwny sposob funckje maja dostęp do zmiennych, które nie powinny istnieć.
