@@ -368,6 +368,7 @@ console.log(notPrivate);
 // IIFE teraz juz jest praktycznie nie używany, ponieważ wystarczy utworzyć blok jak wyżej i juz nasze dane są chronione. Nie ma potrzeby tworzenia funkcji do tego. Jednak jeżeli faktycznie dana funkcja ma byc wykonana tylko raz, to wtedy IIFE się przydaje.
 */
 
+/*
 //////////////// Closures (zamknięcia)
 
 const secureBooking = function () {
@@ -414,3 +415,62 @@ booker();
 // Albo clousure jest jak plecak który funkcja wszędzie nosi. A w tym plecaku są wszystkie zmienne, które były obecne w środowisku w którym funkcja została utworzona. Wtedy gdy funkcja nie moze znaleść zmiennej w swoim zakresie funkcji, JS przeszuka plecak i pobierze brakującą zmienną.
 
 // Nie musimy ręcznie tworzyć zamknięć. JS robi to automatycznie. Nie ma też jawnego dostępu do zamkniętych zmiennych, bo zamknięcia nie są namacalne jak np obiekty i nie umożliwiają nam dostepu. Nie możemy sobie od tak pobrać z niego zmiennych, poniweaż jest to tylko wewnętrzną właściwości funkckcji. Możemy zaobserwować zamkniecie,gdy w dziwny sposob funckje maja dostęp do zmiennych, które nie powinny istnieć.
+
+// Możemy przyjżec się co znajduje się w tym 'plecaku':
+console.dir(booker);
+
+// Wewnętrzna właściwośc Scopes jest VE funkcji booker. Podwójne nawiasy oznaczają własność wewnętrzną do której nie mamy dostępu z naszego kodu.
+*/
+
+// Przykład 1
+//Przykład, że nie musimy zwracać funkcji by zobaczyc zamknięcie.
+let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+g();
+// po wywołaniu g() - a stanie sie 23, a zmienna f stanie się funkcja f.
+f();
+// dostaliśmy 46. Więc jest to dowód na to, że funkcja f przysłoniła wszelkie zmienne EC w którym została zdefiniowana. Nawet gdy sama zmienna f, nie została tutaj technicznie zdefiniowana w VE funkcji. Więc zmienna f została zdefiniowana na zewnątrz w global scope, ale potem gdy przypisujemy jej funkcję, jest nadal zamknięta w VE funkcji g. Obejmuje to zmienną więc jest w stanie uzyskać do niej dostęp, nawet gdy funkcja g zakończyła swoje działanie.
+// W tym miejscu VE funkcji g już nieistnieje, ale, że funkcja f zamknęła się w tym VE dlatego mamy dostęp do zmiennej a. (analogicznie, a zawiera się w plecaku f funkcji)
+console.dir(f);
+
+const h = function () {
+  const b = 666;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+h();
+f();
+console.dir(f);
+
+// kiedy przepisujemy funkcję do nowej wartości, stare zamknięcie (clousure) znika. Teraz clousure jest b, czyli w nowym miejscu narodzenia. Czyli clousre może się zmienić gdy zmienna jest przepisana. Sprawdziło się stwierdzenie, że funkcja nie utraci połączenia ze zmiennymi które były obecne w jej miejscu narodzenia. W tym przypadku funkcja f narodziła się wewnątrz g, a następnie odrodziła się w h, więc pierw clousure zawierało zmienną z 1 miejsca narodzenia, a potem z nastepnego.
+
+// Przykład 2
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passengers.`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers.`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`);
+};
+
+// Dowód na to, że domknięcia maja pierwszeństwo przed scope chain.
+// const perGroup = 1000; // pierw pobierze zmienna w środku funkcji bo w rzeczywistości jest zamknięta w VE.
+
+boardPassengers(180, 3);
+
+// po wywołaniu funkcji zmienna perGroup zostanie utworzona, nastepnie zostanie wywołany timer i zarejstruje funkcje zwrotną i zostanie to wywołane po 3s. Natychmiast zostanie wywołany ostatni console.log (nie będzie czekał tych 3ch sekund.).
+// funkcja timeru, została tutaj wykonana całkowicie niezależnie od boardPassengers, mimo tego funkcja zwrotna była w stanie używac wszystkich zmiennych, które znajdowały się w VE, którym została utworzona.
+// Jest to kolejny wyraźny przykład tworzonego zamknięcia, czyli funkcja zwrotna ma dostęp do zmiennych które były zdefiniowane w boardPassengers a która chwilę temu była wywołana.
+// Zamknięcie więc zawiera też argumenty (n, wait), ponieważ są tylko lokalnymi zmiennymi w funkcji.
