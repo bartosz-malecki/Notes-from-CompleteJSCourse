@@ -74,3 +74,49 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+/*
+// Metody tablicowe są funkcjami, a że tablice są obiektami, to mają dostęp do specjalnych wbudowanych metod, które morzemy postrzegać jako narzędzia do tablic.
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+// SLICE
+// możemy wyodrębnić część dowolnej tablicy. Zwraca nową tablice, ale bez zmiany oryginalnej.
+
+console.log(arr.slice(2));
+console.log(arr.slice(2, 4)); // parametr końcowy nie jest pokazywany. długośc tablicy to końcowy paramter - poczatkowy
+console.log(arr.slice(-2)); // pobranie 2ch opstatnich elementów
+console.log(arr.slice(1, -2)); // pobranie wszystkiego od 1 el prócz 2ch ostatnich
+console.log(arr.slice()); // kopiowanie tablicy to samo co [...arr]
+
+// SPLICE
+// to samo co slice, z tym, że zmienią oryginalną tablice
+
+// console.log(arr.splice(2));
+// jednym z powrzechnych przypadków uzycia jest usuniecie ostatniego elementu
+arr.splice(-1);
+console.log(arr);
+arr.splice(1, 2); // usuniecie 2ch elementów
+console.log(arr);
+
+// REVERSE
+// odwraca tablicę i zmienia oryginalną
+
+arr = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'f'];
+console.log(arr2.reverse());
+console.log(arr2);
+
+// CONCAT
+// łączy dwie tablice. Nie mutuje oryginalnych tablic
+
+const letters = arr.concat(arr2);
+console.log(letters); // to samo co cl([...arr], [...arr2])
+
+// JOIN
+// łączy elementy w string oddzielony danym znakiem
+
+console.log(letters.join(' - '));
+
+// pop, push, shift, unshift poznaliśmy na początku kursu
+*/
