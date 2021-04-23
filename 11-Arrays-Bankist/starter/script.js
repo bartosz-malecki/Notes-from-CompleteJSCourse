@@ -71,11 +71,11 @@ const currencies = new Map([
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
 /////////////////////////////////////////////////
 
 /*
+//////////////////   Simple array methods
+
 // Metody tablicowe są funkcjami, a że tablice są obiektami, to mają dostęp do specjalnych wbudowanych metod, które morzemy postrzegać jako narzędzia do tablic.
 
 let arr = ['a', 'b', 'c', 'd', 'e'];
@@ -119,4 +119,48 @@ console.log(letters); // to samo co cl([...arr], [...arr2])
 console.log(letters.join(' - '));
 
 // pop, push, shift, unshift poznaliśmy na początku kursu
+*/
+
+/*
+///////////// Metoda forEach
+
+// aby przejść przez tabliće możemy użyć pętli for of, albo prościej: metodę forEach.
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// for (const movement of movements) {
+for (const [i, movement] of movements.entries()) {
+  // 1 element to index, 2 element bieżący element
+  // aby uzyskać dostep do indexu
+  if (movement > 0) {
+    console.log(`Movement ${i + 1}:  You deposited ${movement}`);
+  } else {
+    console.log(`Movement ${i + 1}:  You withdrew ${Math.abs(movement)}`);
+  }
+}
+console.log('----- FOREACH -----');
+
+// forEach jest funkcją nadrzędną która potrzebuje funkcji zwrotnej by powiedzieć jej co ma zrobić.
+// Metoda forEach robi pętlę po tablicy i w każdej iteracji wykona funkcję zwrotną i przekaże bieżący element tablicy jako argument.
+// W tym wypadku mówimy: w każdej iteracji zaloguj jeden z tych dwóch ciągów do konsoli.
+// W rzeczywistości forEach przechodzi przez bieżący element, indeks oraz całą tablicę którą zapętlamy.
+
+// movements.forEach(function (movement) {
+movements.forEach(function (mov, i, arr) {
+  // 1 bieżący element, 2 indeks
+  if (mov > 0) {
+    console.log(`Movement ${i + 1}:  You deposited ${mov}`);
+  } else {
+    console.log(`Movement ${i + 1}:  You withdrew ${Math.abs(mov)}`);
+  }
+});
+
+// 0: function(200)
+// 1: function(450)
+// 2: function(400)
+// ...
+
+// kiedy użwyać czego:
+// z pętli for of można się wyrwać, na forEach nie działają break i continue. ForEach obejmuje zawsze całą tablicę.
+// Więc głównie zależy to od preferencji, jednak gdy potrzeba nam się wyrwać z pętli wtedy tylko for of.
 */
