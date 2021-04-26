@@ -65,12 +65,6 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
 /////////////////////////////////////////////////
 
 /*
@@ -164,3 +158,24 @@ movements.forEach(function (mov, i, arr) {
 // z pętli for of można się wyrwać, na forEach nie działają break i continue. ForEach obejmuje zawsze całą tablicę.
 // Więc głównie zależy to od preferencji, jednak gdy potrzeba nam się wyrwać z pętli wtedy tylko for of.
 */
+
+const currencies = new Map([
+  ['USD', 'United States dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound sterling'],
+]);
+
+// Map
+
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}: ${value}`);
+});
+
+// Set
+const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
+console.log(currenciesUnique);
+// currenciesUnique.forEach(function (value, key, map) {
+currenciesUnique.forEach(function (value, _, map) {
+  console.log(`${value}: ${value}`);
+});
+// Otrzymujemy wynik taki, że key = value. W setach nie ma kluczy ani indeksów, więc nie ma wartości która miała by sens dla key. Key mogłoby tu nie byc ale nie usunięto by nie robić zamieszania. Można więc dać '_' co w JS oznacza zmienną jednorazową -zupełnie nie potrzebną.
