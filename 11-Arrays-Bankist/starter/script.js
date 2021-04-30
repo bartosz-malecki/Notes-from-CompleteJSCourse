@@ -61,6 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// wypisanie działań (wpłaty, wypłaty)
 const displayMovements = function (movements) {
   containerMovements.innerHTML = ''; // opróżniam cały kontener i dopiero wtedy dodaje nowe elementy
   movements.forEach(function (mov, i) {
@@ -78,9 +79,24 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+// tworzenie nazw użytkowników - inicjały
+const createUsernames = function (accs) {
+  accs.forEach(
+    acc =>
+      (acc.username = acc.owner // dodajemy nową właściwośc do obiektów account
+        .toLowerCase()
+        .split(' ')
+        .map(name => name[0])
+        .join(''))
+  );
+};
+createUsernames(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -137,7 +153,7 @@ console.log(letters.join(' - '));
 
 // aby przejść przez tabliće możemy użyć pętli for of, albo prościej: metodę forEach.
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
 
 // for (const movement of movements) {
 for (const [i, movement] of movements.entries()) {
@@ -258,4 +274,38 @@ const checkDogs = function (dogsJulia, dogsKate) {
 
 checkDogs([3, 5, 2, 12, 7], [9, 16, 6, 8, 3]);
 checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
+*/
+/*
+/////// MAP, FILTER, REDUCE
+
+// Są to metody których używamy do tworzenia nowych tablic w oparciu o przekształcenie danych z innych tablic.
+
+////////// Map - zwraca nową tablicę zawierająca rezultat operacji na oryginalnej tablicy. Np. wszystkie elementy * 2. Przykład:
+
+// konwertowanie
+const eurToUsd = 1.1;
+
+// const movementsUSD = movements.map(function (mov) {
+//   return mov * eurToUsd;
+// });
+const movementsUSD = movements.map(mov => mov * eurToUsd); // arrow func
+console.log(movements);
+console.log(movementsUSD);
+
+// można zrobic to samo za pomoca pętli for of, jednak to wymaga utworzenia ręcznie pustej tablicy (map zwraca automatycznie). Użycie map metody jest bardziej funkcjonalnym programowaniem i nowocześniejszym.
+// tak jak z forEach, mamy dostęp do 3ch parametrów: wartości, indeksów i całej tablicy:
+
+const movementsDescriptions = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}:  You ${mov > 0 ? 'deposited' : 'withdrew'}  ${Math.abs(
+      mov
+    )}`
+);
+console.log(movementsDescriptions);
+// Czyli...przekazujemy funkcje zwrotną do metody map (sami jej nie wywołujemy), a metoda map wywoła tą funkcję dla każdego elementu tablicy (tutaj movement) czyli po prostu przekaże bieżący element oraz indekx i całą tablicę.
+// Z forEach różni się tym, że forEach stwarza efekty uboczne (side effects). forEach w tym przykładzie wylogowało nam każdy element jeden po drugim, a map całą tablicę.
+
+/////////// Filter - zwraca nową tablicę zawierającą elementy oryginalnej tablicy ,spełniające jakiś warunek, np. wszystkie elementy > 2.
+
+/////////// Reduce - sprowadza wszystkie elementy tablicy do jednej wartości (zamiast tablicy), np. sumuje wszystkie elementy tablicy. Przy tym mamy tzw. zmienną akumulatorową - reduce zapętla tablicę i dodaje bieżący element do akumulatora i na końcu pętli mamy sumę wszystkich elementów. (efekt kuli śnieżnej).
 */
