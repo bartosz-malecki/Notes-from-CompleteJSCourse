@@ -303,9 +303,26 @@ const movementsDescriptions = movements.map(
 );
 console.log(movementsDescriptions);
 // Czyli...przekazujemy funkcje zwrotną do metody map (sami jej nie wywołujemy), a metoda map wywoła tą funkcję dla każdego elementu tablicy (tutaj movement) czyli po prostu przekaże bieżący element oraz indekx i całą tablicę.
-// Z forEach różni się tym, że forEach stwarza efekty uboczne (side effects). forEach w tym przykładzie wylogowało nam każdy element jeden po drugim, a map całą tablicę.
+// Z forEach różni się tym, że forEach stwarza efekty uboczne (side effects) czyli zrobienie czegoś, bez zwracania niczego. forEach w tym przykładzie wylogowało nam każdy element jeden po drugim, a map całą tablicę.
 
 /////////// Filter - zwraca nową tablicę zawierającą elementy oryginalnej tablicy ,spełniające jakiś warunek, np. wszystkie elementy > 2.
 
+// tak jak z forEach czy map, mamy dostęp do 3ch parametrów: wartości, indeksów i całej tablicy.
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+
 /////////// Reduce - sprowadza wszystkie elementy tablicy do jednej wartości (zamiast tablicy), np. sumuje wszystkie elementy tablicy. Przy tym mamy tzw. zmienną akumulatorową - reduce zapętla tablicę i dodaje bieżący element do akumulatora i na końcu pętli mamy sumę wszystkich elementów. (efekt kuli śnieżnej).
 */
+const balance = movements.reduce(function (acc, cur, i, arr) {
+  console.log(`Iteration ${i}: ${acc}`);
+  return acc + cur; //  w każdej iteracji pętli zwracamy zaktualizowany akumulator
+}, 0); // drugi parametr - wartość początkowa akumulatora
+
+console.log(balance);
