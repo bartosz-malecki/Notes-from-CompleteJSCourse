@@ -79,6 +79,13 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+// obliczanie i wyświetlanie balansu
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
+
 // tworzenie nazw użytkowników - inicjały
 const createUsernames = function (accs) {
   accs.forEach(
@@ -319,10 +326,30 @@ console.log(withdrawals);
 
 
 /////////// Reduce - sprowadza wszystkie elementy tablicy do jednej wartości (zamiast tablicy), np. sumuje wszystkie elementy tablicy. Przy tym mamy tzw. zmienną akumulatorową - reduce zapętla tablicę i dodaje bieżący element do akumulatora i na końcu pętli mamy sumę wszystkich elementów. (efekt kuli śnieżnej).
-*/
-const balance = movements.reduce(function (acc, cur, i, arr) {
-  console.log(`Iteration ${i}: ${acc}`);
-  return acc + cur; //  w każdej iteracji pętli zwracamy zaktualizowany akumulator
-}, 0); // drugi parametr - wartość początkowa akumulatora
 
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   console.log(`Iteration ${i}: ${acc}`);
+//   return acc + cur; //  w każdej iteracji pętli zwracamy zaktualizowany akumulator
+// }, 0); // drugi parametr - wartość początkowa akumulatora
+
+// arr func:
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
 console.log(balance);
+
+// zamiast tego było by:
+let balance2 = 0;
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
+// potrzebujemy zmiennej zewnetrznej. przy jednej pętli jest to praktyczne, ale gdy mamy więcej operacji i pętli wtedy jest to kłopotliwe.
+
+// metody unikają tej dodatkowej zmiennej i po prostu od razu zwracają zmienna lub wartośc od razu.
+
+// max value
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]); // gdy szukamy min i max lepiej dać pierwszą wartośc tabilcy jako początkowa wartośc niz 0;
+console.log(max);
+
+// jest mnóstwo rzeczy jakie możemy zrobic za pomocą reduce. Jest ona najpotęzniejszą metodą a zarazem najtrudniejszą. Musimy wiedzieć co ma byc akumulatorem i jak powinien współdziałać z bieżącą wartościa.
+*/
