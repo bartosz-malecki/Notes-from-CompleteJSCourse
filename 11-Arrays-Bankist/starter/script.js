@@ -71,7 +71,7 @@ const displayMovements = function (movements) {
       <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>      
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">${mov}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html); // wrzuca string do html w dane miejsce
@@ -85,6 +85,30 @@ const calcDisplayBalance = function (movements) {
   labelBalance.textContent = `${balance}€`;
 };
 calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const income = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${income}€`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      // wyrzucamy odsetki mniejsze od 1
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
+calcDisplaySummary(account1.movements);
 
 // tworzenie nazw użytkowników - inicjały
 const createUsernames = function (accs) {
@@ -371,7 +395,6 @@ TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
 TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 
 GOOD LUCK 😀
-*/
 
 const calcAverageHumanAge = function (ages) {
   const humanAge = ages.map(dogAge =>
@@ -389,3 +412,21 @@ const calcAverageHumanAge = function (ages) {
 const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 console.log(avg1, avg2);
+*/
+
+const eurToUsd = 1.1;
+
+// Pipeline
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map((mov, i, arr) => {
+    // console.log(arr);
+    return mov * eurToUsd;
+  })
+  // .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
+// możemy używać z wielu metod na raz i mieszać, jednak tylko wtedy gdy wcześniejsza zawiera tablicę!
+// filter i map zwracają tablicę, więc reduce nie może być przed nimi.
+// Możemy sobie wyobrazić to jako rura do przetważania danych. Na początku są dane wejściowe i w tym przypadku sa 3 kroki gdzie są przetważane po drugiej stronie.
+// Jeżeli wychodzą jakies dziwne wyniki, możemy sprawdzić wynik danej operacji (bieżącą tablicę) w nastepnej metodzie. W tym przypadku metode map wywołano na wyniku operacji filter (otrzymaliśmy wartość arr)
