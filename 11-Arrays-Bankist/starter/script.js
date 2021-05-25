@@ -77,38 +77,36 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html); // wrzuca string do html w dane miejsce
   });
 };
-displayMovements(account1.movements);
 
 // obliczanie i wyświetlanie balansu
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const income = movements
+// obliczanie i wyświetlanie poszczególnych ruchów
+const calcDisplaySummary = function (acc) {
+  const income = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${income}€`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
       // wyrzucamy odsetki mniejsze od 1
-      console.log(arr);
+      // console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
 
 // tworzenie nazw użytkowników - inicjały
 const createUsernames = function (accs) {
@@ -122,6 +120,42 @@ const createUsernames = function (accs) {
   );
 };
 createUsernames(accounts);
+
+// event handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // w HTML po wciśnięciu button z formularza, domyślnie strona się przeładowuje. Trzeba temu zapobiec. Prevent form from submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // optional chaining by nie dostawać błedu gdy zle wpiszemy uzytkownika
+
+    // Display UI and welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // Clear input fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur(); // usuwa focus na btn
+
+    // Display movements
+    displayMovements(currentAccount.movements);
+
+    // Display balance
+    calcDisplayBalance(currentAccount.movements);
+
+    // Display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -414,6 +448,8 @@ const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 console.log(avg1, avg2);
 */
 
+/*
+//////////////  The Magic of Chaining Methods
 const eurToUsd = 1.1;
 
 // Pipeline
@@ -430,3 +466,47 @@ console.log(totalDepositsUSD);
 // filter i map zwracają tablicę, więc reduce nie może być przed nimi.
 // Możemy sobie wyobrazić to jako rura do przetważania danych. Na początku są dane wejściowe i w tym przypadku sa 3 kroki gdzie są przetważane po drugiej stronie.
 // Jeżeli wychodzą jakies dziwne wyniki, możemy sprawdzić wynik danej operacji (bieżącą tablicę) w nastepnej metodzie. W tym przypadku metode map wywołano na wyniku operacji filter (otrzymaliśmy wartość arr)
+
+// Nie powinniśmy nadużywać takich łancuchów, ponieważ może to powodować problemy z wydajnością jeżeli bysmy mieli wielkie tablice. Powinnismy skompresowac je do jak najmniejszej liczby metod.
+// Złą praktyką jest także łączenie w łańcuch metod które modyfikują oryginalna tablicę jak np splice czy reverse (raczej używać przy małych aplikacjach jak ta)
+*/
+
+// Coding Challenge #3
+
+/* 
+Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+
+const calcAverageHumanAge2 = ages =>
+  ages
+    .map(dogAge => (dogAge <= 2 ? dogAge * 2 : 16 + dogAge * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+const avg1 = calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]);
+const avg2 = calcAverageHumanAge2([16, 6, 10, 5, 6, 1, 4]);
+console.log(avg1, avg2);
+*/
+/*
+///////////////     Find method
+// Działa podobnie jak wcześniejsze, potrzebuje funkcji zwrotnej i tak jak filter, która zwraca wartośc logiczną.
+
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+
+// Róznica między filter i find jest taka, że find zamiast zwracania nowej tablicy, zwróci nam pierwszy element spełniający dany warunek (pierwszy element dla którego ta operacja staje się prawdą). Oraz filter zwraca tablice, a find tylko element.
+
+// Find przydatne jest przy strukturze obiektów, ponieważ za jej pomoca możemy znaleźć obiekt w tablicy na podstawie jakiejś właściwości.
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+// zazwyczaj celem find jest znalezienie dokładnie jednego elemntu, dlatego przeważnie ustawiamy warunek tak, aby tylko jeden element mógł go spełnić.
+*/
