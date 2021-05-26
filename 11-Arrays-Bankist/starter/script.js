@@ -132,9 +132,10 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
-// event handler
+///////////////     Event handlers
 let currentAccount;
 
+// logowanie
 btnLogin.addEventListener('click', function (e) {
   // w HTML po wciśnięciu button z formularza, domyślnie strona się przeładowuje. Trzeba temu zapobiec. Prevent form from submitting
   e.preventDefault();
@@ -162,6 +163,7 @@ btnLogin.addEventListener('click', function (e) {
   }
 });
 
+// Przelewy z konta na konto
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
@@ -185,6 +187,24 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+// Zamykanie konta
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    Number(inputClosePin.value) === currentAccount.pin &&
+    inputCloseUsername.value === currentAccount.username
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    //delete acc
+    accounts.splice(index, 1);
+    // wylogowanie / hide ui
+    containerApp.style.opacity = 0;
+  }
+  inputClosePin.value = inputCloseUsername.value = '';
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -538,3 +558,7 @@ console.log(account);
 
 // zazwyczaj celem find jest znalezienie dokładnie jednego elemntu, dlatego przeważnie ustawiamy warunek tak, aby tylko jeden element mógł go spełnić.
 */
+
+// findIndex
+// podobnie jak w find, zwróci pierwszy element spełniający dany warunek, jednak zamiast tego elementu - zwraca jej index.
+// .indexOf sprawdza tylko czy dana tablica zawiera daną wartośc, a jeśli tak, to zwraca index. Dzięki findIndex mozemy budowac złożone wartunki.
