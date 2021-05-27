@@ -583,9 +583,49 @@ console.log(account);
 // Równość
 console.log(movements.includes(-130));
 
-// Warunek
+// SOME: Warunek
 console.log(movements.some(mov => mov === -130)); // lepsze do tego includes
 
-const anyDeposits = movements.some(mov => mov > 1500);
+const anyDeposits = movements.some(mov => mov > 0);
 console.log(anyDeposits);
 // Jeżeli istnieje wartość, dla której dany warunek jest prawdziwy - zwróci nam true.
+
+///////////////     EVERY Method
+// Jeżeli wszystkie wartości w tablicy spełniają dany warunek - zwraca true.
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+// Separate callbacks
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+// dobre dla DRY
+
+///////////////     FLAT Method
+// Metoda flat spłaszcza tablice - usuwa zagnieżdżenia. Nie posiada funkcji zwrotnej.
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+// metoda ta, domyślnie idzie tylko o jeden poziom. Możemy ustawić liczbe poziomów.
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+// wybieranie wszystkich działań ze wszystkich kont.
+
+// flat
+// tworze tablice z samymi ruchami
+const overalBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov);
+console.log(overalBalance);
+
+// flatMap
+const overalBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov);
+console.log(overalBalance2);
+// flatMap jest bardziej wydajna, tworzy tablice i spłaszcza za jednym zamachem. Jednak działa to o 1 poziom. Gdy potrzebujemy się bardziej zagłębić, wtedy metoda flat będzie konieczna.
+
+// flat i flatMap są przydatne gdy mamy zagnieżdżone tablice i potrzebujemy z nimi pracować.
