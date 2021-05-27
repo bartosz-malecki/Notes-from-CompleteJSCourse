@@ -187,6 +187,21 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
+    currentAccount.movements.push(amount);
+    // Update UI
+    updateUI(currentAccount);
+  }
+
+  inputLoanAmount.value = '';
+});
+
 // Zamykanie konta
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
@@ -559,6 +574,18 @@ console.log(account);
 // zazwyczaj celem find jest znalezienie dokładnie jednego elemntu, dlatego przeważnie ustawiamy warunek tak, aby tylko jeden element mógł go spełnić.
 */
 
-// findIndex
+///////////////     findIndex Method
 // podobnie jak w find, zwróci pierwszy element spełniający dany warunek, jednak zamiast tego elementu - zwraca jej index.
 // .indexOf sprawdza tylko czy dana tablica zawiera daną wartośc, a jeśli tak, to zwraca index. Dzięki findIndex mozemy budowac złożone wartunki.
+
+///////////////     Some Method
+
+// Równość
+console.log(movements.includes(-130));
+
+// Warunek
+console.log(movements.some(mov => mov === -130)); // lepsze do tego includes
+
+const anyDeposits = movements.some(mov => mov > 1500);
+console.log(anyDeposits);
+// Jeżeli istnieje wartość, dla której dany warunek jest prawdziwy - zwróci nam true.
