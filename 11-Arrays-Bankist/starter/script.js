@@ -62,9 +62,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // wypisanie działań (wpłaty, wypłaty)
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = ''; // opróżniam cały kontener i dopiero wtedy dodaje nowe elementy
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -219,6 +222,13 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
   }
   inputClosePin.value = inputCloseUsername.value = '';
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted; // po każdym kliknięciu zamienia się
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -572,7 +582,7 @@ const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(account);
 
 // zazwyczaj celem find jest znalezienie dokładnie jednego elemntu, dlatego przeważnie ustawiamy warunek tak, aby tylko jeden element mógł go spełnić.
-*/
+
 
 ///////////////     findIndex Method
 // podobnie jak w find, zwróci pierwszy element spełniający dany warunek, jednak zamiast tego elementu - zwraca jej index.
@@ -621,7 +631,7 @@ const overalBalance = accounts
   .reduce((acc, mov) => acc + mov);
 console.log(overalBalance);
 
-// flatMap
+///////////////     FLAT Method
 const overalBalance2 = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, mov) => acc + mov);
@@ -629,3 +639,38 @@ console.log(overalBalance2);
 // flatMap jest bardziej wydajna, tworzy tablice i spłaszcza za jednym zamachem. Jednak działa to o 1 poziom. Gdy potrzebujemy się bardziej zagłębić, wtedy metoda flat będzie konieczna.
 
 // flat i flatMap są przydatne gdy mamy zagnieżdżone tablice i potrzebujemy z nimi pracować.
+
+
+///////////////     SORT Method
+// Sortuje zawartość tablicy. Mutuje oryginalną tablicę!!
+
+// Strings - alfabetycznie
+const owner = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owner.sort());
+console.log(owner);
+
+// Numbers .
+console.log(movements);
+// console.log(movements.sort());- konwertuje na ciągi i wtedy od najmniejszej do największej ale np -10 -20 10 20
+
+// return < 0, A, B (keep order)
+// return > 0, B, A (switch order)
+
+// Ascending - rosnąco
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (a < b) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending - malejąco
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (a < b) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
+
+// Jeżeli mamy mieszaną tablice liczby/ciągi, to nie zadziała.
+*/
