@@ -674,3 +674,44 @@ console.log(movements);
 
 // Jeżeli mamy mieszaną tablice liczby/ciągi, to nie zadziała.
 */
+
+///////////////     More ways to creating and filling
+// Możemy programowo utworzyć tablicę np:
+
+const arr = [1, 2, 3, 4, 5, 6, 7];
+
+// Empty arrs + fill method
+const x = new Array(7); // pusta tablica z 7 elementami
+
+// działa na to tylko jedna metoda - fill (podobna do slice).
+// x.fill(1); // wypełnia 7ma jedynkami
+
+x.fill(1, 3, 5); // wypełnia 1ką od indeksu 3go do 5go(bez niego)
+console.log(x);
+// możemy wypełniać też wypełnione tablice:
+arr.fill(23, 4, 6); // daje 23 na pozycjach 4 i 5
+console.log(arr);
+
+// Array.from
+// w zasadzie nie używamy tego jako metoda na tablicy, tylko uzywamy na konstruktorze tablicy który jest funkcją
+const y = Array.from({ length: 7 }, () => 1); // przekazujemy obiekt o długości 7, oraz funcja zwrotna (tutaj map method)(nie potrzebujemy żadnych argumentów itp).
+// Robi to samo co wyżej, ale jest czystrze
+console.log(y);
+
+const z = Array.from({ length: 7 }, (cur, i) => i + 1); // jak w map method. Mamy dostęp do aktualnego elementu i indeksu. Tutaj dodajemy do każdego indeksu 1 i da nam to wartości od 1-7. Zamiast cur możemy dać '_' ponieważ nie potrzebujemy tego parametru.
+console.log(z);
+
+// .from funkcja została wprowadzona w celu utworzenia tablic ze struktur podobnych do tablic czyli strings, maps i sets (są iterowalne).
+
+// Pobranie elementów z UI nie mająć ich nigdzie w kodzie (nie mając tablicy z tymi wartościami)
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUI);
+
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')]; // drugi sposób ale trzeba osobno zmapować.
+});
+// Użyliśmy Array.from do stworzenia tablicy z wyników querySelectorAll (nie jest tablicą tylko strukturą podobną do tablicy). Tą strukturę łatwo można przekonwertowąc na tablicę dzięki Array.from(). Drugi krok to map method dzięki której przekształcamy tą strukturę w tablicę (konwertowanie surowego elementu na jego zawartość tekstową z usunęciem znaku euro)
