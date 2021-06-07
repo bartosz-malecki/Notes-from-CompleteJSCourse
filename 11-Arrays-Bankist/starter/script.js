@@ -588,7 +588,7 @@ console.log(account);
 // podobnie jak w find, zwróci pierwszy element spełniający dany warunek, jednak zamiast tego elementu - zwraca jej index.
 // .indexOf sprawdza tylko czy dana tablica zawiera daną wartośc, a jeśli tak, to zwraca index. Dzięki findIndex mozemy budowac złożone wartunki.
 
-///////////////     Some Method
+///////////////     SOME Method
 
 // Równość
 console.log(movements.includes(-130));
@@ -673,7 +673,7 @@ movements.sort((a, b) => b - a);
 console.log(movements);
 
 // Jeżeli mamy mieszaną tablice liczby/ciągi, to nie zadziała.
-*/
+
 
 ///////////////     More ways to creating and filling
 // Możemy programowo utworzyć tablicę np:
@@ -703,7 +703,7 @@ console.log(z);
 
 // .from funkcja została wprowadzona w celu utworzenia tablic ze struktur podobnych do tablic czyli strings, maps i sets (są iterowalne).
 
-// Pobranie elementów z UI nie mająć ich nigdzie w kodzie (nie mając tablicy z tymi wartościami)
+// Pobranie elementów z UI nie mając ich nigdzie w kodzie (nie mając tablicy z tymi wartościami)
 
 labelBalance.addEventListener('click', function () {
   const movementsUI = Array.from(
@@ -715,3 +715,27 @@ labelBalance.addEventListener('click', function () {
   const movementsUI2 = [...document.querySelectorAll('.movements__value')]; // drugi sposób ale trzeba osobno zmapować.
 });
 // Użyliśmy Array.from do stworzenia tablicy z wyników querySelectorAll (nie jest tablicą tylko strukturą podobną do tablicy). Tą strukturę łatwo można przekonwertowąc na tablicę dzięki Array.from(). Drugi krok to map method dzięki której przekształcamy tą strukturę w tablicę (konwertowanie surowego elementu na jego zawartość tekstową z usunęciem znaku euro)
+*/
+
+//////////////////////////////////////
+//////////////  Array Methods Practice
+
+// 1. Obliczenie wszystkich wpłat ze wszystkich depozytów.
+// Trzeba utworzyć jedną spłaszczoną tablicę z wszystkimi ruchami, a następnie odfiltrować te wpływające i zsumować.
+
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((sum, cur) => sum + cur, 0);
+console.log(bankDepositSum);
+
+// 2. Obliczanie ilości depozytów z banku z conajmniej 1k.
+
+// const numDeposits1000 = accounts
+//   .flatMap(acc => acc.movements)
+//   .filter(mov => mov >= 1000).length;
+
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((count, cur) => (cur >= 1000 ? count + 1 : count), 0);
+console.log(numDeposits1000);
