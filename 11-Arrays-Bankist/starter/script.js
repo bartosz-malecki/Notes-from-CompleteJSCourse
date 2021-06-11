@@ -799,12 +799,27 @@ HINT 1: Use many different tools to solve these challenges, you can use the summ
 HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
 
 TEST DATA:
+
+GOOD LUCK 😀
+*/
+
 const dogs = [
   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
   { weight: 8, curFood: 200, owners: ['Matilda'] },
   { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
-  { weight: 32, curFood: 340, owners: ['Michael'] }
+  { weight: 32, curFood: 340, owners: ['Michael'] },
 ];
 
-GOOD LUCK 😀
-*/
+// 1.
+dogs.forEach(dog => (dog.recomFood = Math.trunc(dog.weight ** 0.75 * 28)));
+console.log(dogs);
+
+// 2. Find Sarah's dog and log to the console whether it's eating too much or too little. HINT: Some dogs have multiple owners, so you first need to find Sarah in the owners array, and so this one is a bit tricky (on purpose) 🤓
+
+const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+
+console.log(
+  `Sarah's dog is eating too ${
+    sarahDog.curFood > sarahDog.recomFood ? 'much' : 'little'
+  }.`
+);
