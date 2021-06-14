@@ -823,3 +823,34 @@ console.log(
     sarahDog.curFood > sarahDog.recomFood ? 'much' : 'little'
   }.`
 );
+
+// 3. Create an array containing all owners of dogs who eat too much ('ownersEatTooMuch') and an array with all owners of dogs who eat too little ('ownersEatTooLittle').
+
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.curFood > dog.recomFood)
+  .flatMap(dog => dog.owners);
+
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.curFood < dog.recomFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooLittle);
+
+// 4. Log a string to the console for each array created in 3., like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+
+console.log(`${ownersEatTooMuch.join(' and ')} dog's eat too much!`);
+console.log(`${ownersEatTooLittle.join(' and ')} dog's eat too little!`);
+
+// 5. Log to the console whether there is any dog eating EXACTLY the amount of food that is recommended (just true or false)
+
+console.log(dogs.some(dog => dog.curFood === dog.recomFood));
+
+// 6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+// current > (recommended * 0.90) && current < (recommended * 1.10)
+console.log(
+  dogs.some(
+    dog =>
+      dog.curFood > dog.recomFood * 0.9 && dog.curFood < dog.recomFood * 1.1
+  )
+);
