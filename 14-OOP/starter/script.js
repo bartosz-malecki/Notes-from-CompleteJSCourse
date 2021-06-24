@@ -1,6 +1,7 @@
 'use strict';
-
+/*
 //////////////// Object-Oriented Programming (OOP)
+
 // OOP to paradygmat (styl kodu, jak piszemy i organizujemy go) programowania oparty na koncepcji obiektów.
 // Używamy obiektów do modelowania, wyrażania aspektów świata rzeczywistego takich jak uzytkownik czy lista zadań do wykonania, lub do bardziej abstrakcyjnych funkcji jak komponent HTML czy struktura danych.
 // Obiekty mogą zawierać dane, które nazywamy właściwościami (properties) oraz kody - który nazywamy metodami. Używając obiektów, pakujemy wszystkie dane do odpowiednich zachowań w jeden duży blok. To sprawia, że działanie bezpośrednio na danych jest bardzo łatwe.
@@ -38,3 +39,58 @@
 ////           Polymorphism
 // Polimorfizm oznacza, że klasa potomna może nadpisać metodę odziedziczoną, czyli może być np bardziej złożona. Np admin potrzebował by 2składnikowego logowania a user 1.
 // Nadpisywanie jest proste - piszemy nową metodę o tej samej nazwie.
+
+////////////////                OOP in JS
+
+// Obiekty są połączone z pewnym obiektem prototypowym. Mówimy, że każdy obiekt ma swój prototyp.
+// Obiekt prototypowy zawiera metody i właściwości do których mają dostęp i mogą z nich korzystać, wszystkie obiekty połączone z tym prototypem. Takie zachowanie nazywamy - prototypowym dziedziczeniem (Prototypal inheritance). Czyli obiekty dziedziczą te właściwosci i metody.
+// Wcześniej (w ogólnym rozrachunku) klasa dziedziczyła po innej klasie. Tutaj instancja dziedziczy po klasie!!
+// Obiekty delegują zachowanie do połączonego obiektu prototypowego.
+// 'Zachowanie' to inny termin określający metody!
+// Oprucz dziedziczenia prototypów, nazywamy to również delegowaniem mechanizu. Prototypal inheritance/delegation.
+//     Obcjets (Can access methods) ----->  Prototype (Contains methods)
+
+////           Implementacja OOP w JS
+// W JS istnieją 3 różne sposoby implementacji OOP: 1. Constructor functions, 2. ES6 Classes, 3. Obcject.create().
+
+// 1. Funkcje konstruktorów są sposobem na programowe tworzenie obiektów przy użyciu funkcji, która również ustawi prototyp nowego obiektu. Tak są zaimplementowane obiekty wbudowane jak Arrays, Sets czy Maps.
+
+// 2. ES6 Classes są nowoczesniejszym sposobem wykonywania OOP w JS. Nie są to jednak identyczne 'klasyczne klasy' jak wyżej. Są tzw 'syntactic sugar', czyli są poprostu warstwą abstrakcji nad funkcjami konstruktora (poprostu ładniejsza składnia, ale behind the scenes są implementowane z funkcjami konstruktora)
+
+// 3. Object.create() to najszybszy i najprostrzy sposób na połączenie obiektu z obiektem prototypowym.
+*/
+
+// Funkcja konstruktora:
+// W OOP istnieje konwencja, że nazwy funkcji konstruktora zaczynają się z dużej litery! Dodatkowo zadziała deklaracja oraz wyrażenie funkcji. Arrow func nie działa przy konstruktorze (ponieważ nie zawiera this)!
+
+const Person = function (firstName, birthYear) {
+  // instance properties
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+
+  // never do this!! aby dodać metody używa się prototypów i dziedziczenia
+  //   this.calcAge = function () {
+  //     console.log(2037 - this.birthYear);
+  //   };
+};
+
+const bartek = new Person('Bartek', 1990);
+console.log(bartek);
+
+// Różnica między zwykła funkcja a kontruktową jest taka, że wywołujemy ją z operatorem - new.
+// Co się dzieje przez wywołanie z new? :
+// 1. New {} is created - tworzy się nowy obiekt.
+// 2. function is called, this = {}, this będzie wskazywac na ten nowy obiekt.
+// 3. {} is linked to prototype.
+// 4. function automatically return {}
+
+// Podsumowując - wywołujemy funkcję konstruktora z oberatorem new, dlatego od razu jest tworzony nowy pusty obiekt. Następnie wywołuje się funkcja i this jest przypisane do pustego obiektu. Potem w funkcji ustawiamy nowe właściwości dla tego obiektu i dajemy im takie same nazwy jak parametry jakie przekazujemy funkcji. Na końcu funkcji this ma te dwie właściwości i obiekt jest automatycznie zwracany z funkcji.
+
+const jonas = new Person('Jonas', 1985);
+const jacob = new Person('Jacob', 2000);
+console.log(jonas, jacob);
+
+// Zatem według analogii, funkcja konstruktora jest planem domu, a obiekty to domu utworzone na jego podstawie i są one realne - w tym wypadku obiekt z rzeczywistymi danymi. bartek jonas i jacob są instancjami.
+console.log(bartek instanceof Person);
+
+////           Prototypes
