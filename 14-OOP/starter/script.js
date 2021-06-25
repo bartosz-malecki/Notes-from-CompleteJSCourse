@@ -90,7 +90,24 @@ const jonas = new Person('Jonas', 1985);
 const jacob = new Person('Jacob', 2000);
 console.log(jonas, jacob);
 
-// Zatem według analogii, funkcja konstruktora jest planem domu, a obiekty to domu utworzone na jego podstawie i są one realne - w tym wypadku obiekt z rzeczywistymi danymi. bartek jonas i jacob są instancjami.
+// Zatem według analogii, funkcja konstruktora jest planem domu, a obiekty to domy utworzone na jego podstawie i są one realne - w tym wypadku obiekt z rzeczywistymi danymi. bartek jonas i jacob są instancjami.
 console.log(bartek instanceof Person);
 
 ////           Prototypes
+// Każda funkcja w JS z automatu ma właściwośc zwaną prototypem, która obejmuje funkcję konstruktora. Każdy obiekt utworzony za pomoca konstruktora uzyskuje dostęp do wszystkich metod i właściwości, które zdefiniujemy we właściwościach prototypu konstruktora.
+console.log(Person.prototype);
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
+bartek.calcAge();
+// Możemy użyc tej metody na innym obiekcie, nawet jak nie znajduje sie on na tym samym obiekcie. Mamy do niej dostęp dzięki dziedziczeniu prototypów.
+// Nie wrzucamy do obiektu tej metody bo wtedy tworzylibyśmy jej kopie i dołączali do każdego obiektu, a tak tworzymy tylko jedną kopię i wszystkie utworzone obiekty za pomocą funkcji konstruktora mają do niej dostęp.
+
+// Prototypem bartka, jonasa i jacoba jest Person.prototype. Każdy obiekt ma specjalna właściwośc __proto__ (zostaje dodana w kroku 3cim).
+console.log(bartek.__proto__); // prototyp bartka
+console.log(bartek.__proto__ === Person.prototype); // potwierdzenie
+console.log(Person.prototype.isPrototypeOf(bartek));
+
+// Person.prototype nie jest prototypem Person, tylko jest tym, co będzie używane jako prototyp wszystkich obiektów stworzonych przez funk konstr. !!
+console.log(Person.prototype.isPrototypeOf(Person));
