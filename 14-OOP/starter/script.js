@@ -119,7 +119,29 @@ console.log(bartek, jacob);
 console.log(bartek.hasOwnProperty('firstName'));
 console.log(bartek.hasOwnProperty('species'));
 
-////           Prototype Chain
+////           Prototype Chain i Inheritance
 // Każdy obiekt ma swój prototyp, więc Person.prototype też musi mieć i jest nim Object.prototype. Powstaje on gdy tylko tworzymy nowy obiekt. {...} = new Object(...).
 // Cała seria takich powiązań obiektów nazywa się Prototype Chain (coś jak scope chain), a Object.prototype jest zwykle na szczycie łańcucha, co oznacza, że jego prototyp jest pusty - zatem jego __proto__: null (oznacza koniec łancucha protorypów).
 // Ilekroć JS próbuje znaleźć określoną właściwośc lub metodę w określonym obiekcjie, będzie szukał nastęonego prototypu w łańcuchu, czy może go tam znaleźć.
+
+console.log(bartek.__proto__);
+// Object.prototype (top of prototype chain)
+console.log(bartek.__proto__.__proto__);
+console.log(bartek.__proto__.__proto__.__proto__);
+
+const arr = [1, 2, 3, 4, 5, 6, 78, 8, 1, 2, 3]; // new Array === []
+console.log(arr.__proto__); // znajdują się tu wszystkie metody.
+// Własnośc .prototype będzie prototypem wszystkich obiektów utworzonych przez tego konstruktora.
+console.log(arr.__proto__ === Array.prototype);
+
+// Każda tablica nie zawiera tych metod, zamiast tego każda tablica dziedziczy je po swoim prototypie.
+// Za każdym razem gdy tworzymy tablice jak ta arr, jest ona tworzona przez konstruktor Array
+
+// Dziedziczenie prototypów to tak naprawde mechanizm ponownego wykorzystania kodu - wszystkie te metody muszą istnieć tylko raz, gdzieś w silniku JS, a następnie wszystkie tablice w kodzie otrzymują dostęp do nich poprzez dziedziczenie i łańcuch prototypów.
+
+// Chcemy metodę co zwróci unikalne elementy tablicy.
+Array.prototype.unique = function () {
+  return [...new Set(this)]; // this będzie tablica na której ta metoda się wykona.
+};
+console.log(arr.unique());
+// Tego przykładu w praktyce lepiej nie robić - rozszerzenie prototypu wbudowanego obiektu tak jak tu.
