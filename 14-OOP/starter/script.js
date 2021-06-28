@@ -111,3 +111,15 @@ console.log(Person.prototype.isPrototypeOf(bartek));
 
 // Person.prototype nie jest prototypem Person, tylko jest tym, co będzie używane jako prototyp wszystkich obiektów stworzonych przez funk konstr. !!
 console.log(Person.prototype.isPrototypeOf(Person));
+
+Person.prototype.species = 'Homo sapiens';
+console.log(bartek, jacob);
+// Właściwość ta nie jest bezpośrednio w obiekcie, więc nie jest jego własnością. Własnymi właściwościami są tylko te, które są zdefiniowane bezpośrednio w samym obiekcie - nie uwzlgędniając odziedziczonych właściwości.
+// Można to sprawdzić:
+console.log(bartek.hasOwnProperty('firstName'));
+console.log(bartek.hasOwnProperty('species'));
+
+////           Prototype Chain
+// Każdy obiekt ma swój prototyp, więc Person.prototype też musi mieć i jest nim Object.prototype. Powstaje on gdy tylko tworzymy nowy obiekt. {...} = new Object(...).
+// Cała seria takich powiązań obiektów nazywa się Prototype Chain (coś jak scope chain), a Object.prototype jest zwykle na szczycie łańcucha, co oznacza, że jego prototyp jest pusty - zatem jego __proto__: null (oznacza koniec łancucha protorypów).
+// Ilekroć JS próbuje znaleźć określoną właściwośc lub metodę w określonym obiekcjie, będzie szukał nastęonego prototypu w łańcuchu, czy może go tam znaleźć.
