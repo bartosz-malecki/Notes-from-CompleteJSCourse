@@ -61,7 +61,7 @@
 */
 
 /*
-// Funkcja konstruktora:
+//                           Funkcja konstruktora:
 // W OOP istnieje konwencja, że nazwy funkcji konstruktora zaczynają się z dużej litery! Dodatkowo zadziała deklaracja oraz wyrażenie funkcji. Arrow func nie działa przy konstruktorze (ponieważ nie zawiera this)!
 
 const Person = function (firstName, birthYear) {
@@ -161,7 +161,7 @@ DATA CAR 1: 'BMW' going at 120 km/h
 DATA CAR 2: 'Mercedes' going at 95 km/h
 
 GOOD LUCK 😀
-*/
+
 
 const Car = function (make, speed) {
   this.make = make;
@@ -187,3 +187,51 @@ bmw.accelerate();
 bmw.accelerate();
 bmw.brake();
 bmw.brake();
+*/
+
+//                           ES6 Classes
+
+//
+
+// Classes w JS są takim upiękrzeniem funkcji konstruktora. Nadal wrażają prototypy za kulisami, ale ze składnią która ma większy sens dla programistów innych języków.
+
+// class expression
+// const PersonCl = class {}
+
+// class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // Methods will be added to .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hej ${this.firstName}`);
+  }
+}
+const jessica = new PersonCl('Jessica', 1996);
+console.log(jessica);
+jessica.calcAge();
+console.log(jessica.__proto__ === PersonCl.prototype);
+
+// Działa tak samo jak każdy inny konstruktor funkcji, z tym, że wygląda ładniej. Dzięki tej składni nie musimy ręcznie modyfikować właściwości prototypu. Wystarczy napisać metodę wewnątrz klasy, ale poza konstruktorem.
+
+// Oczywiście ręcznie też możemy dodawać, też zadziała:
+
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hej ${this.firstName}`);
+// };
+jessica.greet();
+
+// 1. Klasy nie są podnoszone (not hoisted). Deklaracje funkcji są podnoszone tzn., że można je użyć zanim zostaną zadeklarowane. W przypdakdu deklaracji klasy, to nie zadziała.
+
+// 2. Classes are first-class citizens - znaczy, że możemy je przekazywać do funkcji, a także zwracać z funckji ponieważ, klasy to tak naprawdę specjalny rodzaj funkcji za kulisami.
+
+// Klasy są wykonywane w strict mode. Nawet jeżeli nie aktywowaliśmy strict mode, to cały kod w klasie zostanie wykonany w tym trybie ścisłym.
+
+// Kożystanie z funkcji konstruktora czy classes to wybór osobisty wg preferencji. Klasy są bardziej spójne, cały kod znajduje sie w jednym bloku, a w konstruktorze funkcji troche jest bałagan i można sie pogubić.
