@@ -191,8 +191,6 @@ bmw.brake();
 
 //                           ES6 Classes
 
-//
-
 // Classes w JS są takim upiękrzeniem funkcji konstruktora. Nadal wrażają prototypy za kulisami, ale ze składnią która ma większy sens dla programistów innych języków.
 
 // class expression
@@ -200,8 +198,8 @@ bmw.brake();
 
 // class declaration
 class PersonCl {
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
     this.birthYear = birthYear;
   }
 
@@ -213,10 +211,27 @@ class PersonCl {
   greet() {
     console.log(`Hej ${this.firstName}`);
   }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // ustawienie właściwości która już istnieje
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    // taka konwencja żeby unknąć konfliktu tej samej nazwy zmiennej
+    else alert(`${name} is not a full name`);
+  }
+  // nie możemy podać pełnego imienia bo _firstName nieistnieje, więc musimy zwrócić
+  get fullName() {
+    return this._fullName;
+  }
 }
-const jessica = new PersonCl('Jessica', 1996);
+const jessica = new PersonCl('Jessica Davies', 1996);
 console.log(jessica);
 jessica.calcAge();
+console.log(jessica.age); // jak widać getter jest taki sam jak zwykła metoda którą ustawiliśmy w prototypie.
+
 console.log(jessica.__proto__ === PersonCl.prototype);
 
 // Działa tak samo jak każdy inny konstruktor funkcji, z tym, że wygląda ładniej. Dzięki tej składni nie musimy ręcznie modyfikować właściwości prototypu. Wystarczy napisać metodę wewnątrz klasy, ale poza konstruktorem.
@@ -228,10 +243,35 @@ console.log(jessica.__proto__ === PersonCl.prototype);
 // };
 jessica.greet();
 
+const walter = new PersonCl('Walter White', 1965);
 // 1. Klasy nie są podnoszone (not hoisted). Deklaracje funkcji są podnoszone tzn., że można je użyć zanim zostaną zadeklarowane. W przypdakdu deklaracji klasy, to nie zadziała.
 
 // 2. Classes are first-class citizens - znaczy, że możemy je przekazywać do funkcji, a także zwracać z funckji ponieważ, klasy to tak naprawdę specjalny rodzaj funkcji za kulisami.
 
-// Klasy są wykonywane w strict mode. Nawet jeżeli nie aktywowaliśmy strict mode, to cały kod w klasie zostanie wykonany w tym trybie ścisłym.
+// 3. Klasy są wykonywane w strict mode. Nawet jeżeli nie aktywowaliśmy strict mode, to cały kod w klasie zostanie wykonany w tym trybie ścisłym.
 
-// Kożystanie z funkcji konstruktora czy classes to wybór osobisty wg preferencji. Klasy są bardziej spójne, cały kod znajduje sie w jednym bloku, a w konstruktorze funkcji troche jest bałagan i można sie pogubić.
+// Korzystanie z funkcji konstruktora czy classes to wybór osobisty wg preferencji. Klasy są bardziej spójne, cały kod znajduje sie w jednym bloku, a w konstruktorze funkcji troche jest bałagan i można sie pogubić.
+
+////           Setters and Getters
+// Każdy obiekt może mieć własności specjalne setter i getter. (Normalne są zwane własnościami danych.) Są to metody pobierające i ustawiające które są funkcjami i pobierają i ustawiają wartośc, ale na zewnatrzą wyglądają jak normalne właściwości.
+
+const account = {
+  owner: 'Jonas',
+  movement: [200, 120, 300, 500, 69],
+
+  get latest() {
+    return this.movement.slice(-1).pop();
+  },
+
+  set latest(mov) {
+    this.movement.push(mov);
+  },
+};
+console.log(account.latest); // nie wywołujemy tego jako metody latest(), tylko piszemy tak jakby to była zwykła właściwość.
+// przydatne gdy chcemy przeczytać cos jako właściwośc ale nadal trzeba wykonać jakieś obliczenia wcześniej.
+// gdy mamy getter, letter nie jest wymagany jeśli chodzi o tą samą właściwość. Więc wystarczy jedno albo drugie.
+
+account.latest = 666; // ustawiamy nową wartośc jak dla właściości a nie metody
+console.log(account.movement);
+
+// metody pobierające i ustawiające mogą byc przydatne do weryfikacji poprawności danych. (wyżej sprawdzenie czy jest pełne imie)
