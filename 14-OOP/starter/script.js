@@ -96,6 +96,7 @@ console.log(bartek instanceof Person);
 
 ////           Prototypes
 // Każda funkcja w JS z automatu ma właściwośc zwaną prototypem, która obejmuje funkcję konstruktora. Każdy obiekt utworzony za pomoca konstruktora uzyskuje dostęp do wszystkich metod i właściwości, które zdefiniujemy we właściwościach prototypu konstruktora.
+
 console.log(Person.prototype);
 Person.prototype.calcAge = function () {
   console.log(2037 - this.birthYear);
@@ -203,13 +204,14 @@ class PersonCl {
     this.birthYear = birthYear;
   }
 
+  // Instance methods
   // Methods will be added to .prototype property
   calcAge() {
     console.log(2037 - this.birthYear);
   }
 
   greet() {
-    console.log(`Hej ${this.firstName}`);
+    console.log(`Hej ${this.fullName}`);
   }
 
   get age() {
@@ -226,10 +228,16 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+
+  // Static method
+  static hey() {
+    console.log(`Hey there`);
+  }
 }
 const jessica = new PersonCl('Jessica Davies', 1996);
 console.log(jessica);
 jessica.calcAge();
+PersonCl.hey();
 console.log(jessica.age); // jak widać getter jest taki sam jak zwykła metoda którą ustawiliśmy w prototypie.
 
 console.log(jessica.__proto__ === PersonCl.prototype);
@@ -275,3 +283,7 @@ account.latest = 666; // ustawiamy nową wartośc jak dla właściości a nie me
 console.log(account.movement);
 
 // metody pobierające i ustawiające mogą byc przydatne do weryfikacji poprawności danych. (wyżej sprawdzenie czy jest pełne imie)
+
+////           Static methods
+// Metody statyczne nie są dostępne w instancjach i czasami są przydatne do zaimplementowania jakiejś funkcji pomocniczej dotyczącej klasy lub funkcji konstruktora. Są one dołączone do konstruktora, a nie do prototypów dlatego zadziała na Array.from(...) a nie zadziała na [1,2,3].from(...).
+// A ponieważ, nie ma ich w prototypie, to inne obiekty tego nie dziedziczą.
