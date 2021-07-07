@@ -288,6 +288,7 @@ console.log(account.movement);
 // Metody statyczne nie są dostępne w instancjach i czasami są przydatne do zaimplementowania jakiejś funkcji pomocniczej dotyczącej klasy lub funkcji konstruktora. Są one dołączone do konstruktora, a nie do prototypów dlatego zadziała na Array.from(...) a nie zadziała na [1,2,3].from(...).
 // A ponieważ, nie ma ich w prototypie, to inne obiekty tego nie dziedziczą.
 */
+
 /*
 //                           Object.create()
 
@@ -335,7 +336,7 @@ GOOD LUCK 😀
 2. Implement an 'accelerate' method that will increase the car's speed by 10, and log the new speed to the console;
 3. Implement a 'brake' method that will decrease the car's speed by 5, and log the new speed to the console;
 4. Create 2 car objects and experiment with calling 'accelerate' and 'brake' multiple times on each of them.
-*/
+
 
 class CarCl {
   constructor(make, speed) {
@@ -366,3 +367,36 @@ const ford = new CarCl('Ford', 120);
 console.log(ford.speedUS);
 ford.speedUS = 50;
 console.log(ford);
+*/
+
+///////////////////////////////////////
+// Inheritance between "Classes": Construktor Function
+
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
+const Student = function (firstName, birthYear, course) {
+  // this.firstName = firstName; // DRY
+  // this.birthYear = birthYear;
+  Person.call(this, firstName, birthYear); // ustawiamy ręcznie this, by z tej funkcji this było faktycznie this z Person
+  this.course = course;
+};
+
+Student.prototype = Object.create(Person.prototype);
+// Teraz obiekt prototypowy studenta, dziedziczy po obiekcie proto Person
+// To połączenie trzeba utworzyć tutaj, zanim dodamy metody do studenta, ponieważ w tym momencie ten Obiekt.create() zwróci pusty obiekt. Jeżeli było by to po stworzeniu metody introduce, object.create() nadpisało by tą metodę.
+
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student('Mike', 2020, 'Computer Science');
+mike.introduce();
+console.log(mike);
+// Aby połączyć dwa prototypowe obiekty manulanie, uzywamy Object.create()
