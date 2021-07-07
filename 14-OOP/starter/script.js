@@ -189,7 +189,7 @@ bmw.accelerate();
 bmw.brake();
 bmw.brake();
 */
-
+/*
 //                           ES6 Classes
 
 // Classes w JS są takim upiękrzeniem funkcji konstruktora. Nadal wrażają prototypy za kulisami, ale ze składnią która ma większy sens dla programistów innych języków.
@@ -287,3 +287,82 @@ console.log(account.movement);
 ////           Static methods
 // Metody statyczne nie są dostępne w instancjach i czasami są przydatne do zaimplementowania jakiejś funkcji pomocniczej dotyczącej klasy lub funkcji konstruktora. Są one dołączone do konstruktora, a nie do prototypów dlatego zadziała na Array.from(...) a nie zadziała na [1,2,3].from(...).
 // A ponieważ, nie ma ich w prototypie, to inne obiekty tego nie dziedziczą.
+*/
+/*
+//                           Object.create()
+
+// Funkcja ta działa zupełnie inaczej niż funkcja konstruktora oraz ES6 Classes. Dalej istnieje idea dziedziczenia prototypów, jednak nie są w to zaangażowane żadne właściwości prototypu, ani funkcje konstruktora czy new operator.
+// Możemy ręcznie ustawić prototyp obiektów na dowolny obiekt:
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+  // wygląda jak funkcja konst. ale nią nie jest bo nie ma operatora new do wywołania jej.
+};
+// Tworzymy obiekt osoby z tym obiektem jako prototypem:
+const steven = Object.create(PersonProto); // pusty obiekt powiązany z prototypem PersonProto.
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1972);
+sarah.calcAge();
+
+// Wniosek: Object.create() tworzy nowy obiekt, a prototypem jego będzie obiekt, który przekażemy.
+*/
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+1. Re-create challenge 1, but this time using an ES6 class;
+2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide by 1.6);
+3. Add a setter called 'speedUS' which sets the current speed in mi/h (but converts it to km/h before storing the value, by multiplying the input by 1.6);
+4. Create a new car and experiment with the accelerate and brake methods, and with the getter and setter.
+
+DATA CAR 1: 'Ford' going at 120 km/h
+
+GOOD LUCK 😀
+1. Use a constructor function to implement a Car. A car has a make and a speed property. The speed property is the current speed of the car in km/h;
+2. Implement an 'accelerate' method that will increase the car's speed by 10, and log the new speed to the console;
+3. Implement a 'brake' method that will decrease the car's speed by 5, and log the new speed to the console;
+4. Create 2 car objects and experiment with calling 'accelerate' and 'brake' multiple times on each of them.
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} going at ${this.speed} km/h`);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} going at ${this.speed} km/h`);
+  }
+
+  get speedUS() {
+    return `${this.make} going at ${this.speed / 1.6} mi/h`;
+  }
+
+  set speedUS(v) {
+    this.speed = v * 1.6;
+  }
+}
+
+const ford = new CarCl('Ford', 120);
+
+console.log(ford.speedUS);
+ford.speedUS = 50;
+console.log(ford);
