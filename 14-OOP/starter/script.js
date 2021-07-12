@@ -367,7 +367,7 @@ const ford = new CarCl('Ford', 120);
 console.log(ford.speedUS);
 ford.speedUS = 50;
 console.log(ford);
-*/
+
 
 ///////////////////////////////////////
 // Inheritance between "Classes": Construktor Function
@@ -388,6 +388,8 @@ const Student = function (firstName, birthYear, course) {
   this.course = course;
 };
 
+// Linking prototypes
+// Aby połączyć dwa prototypowe obiekty manulanie, uzywamy Object.create().
 Student.prototype = Object.create(Person.prototype);
 // Teraz obiekt prototypowy studenta, dziedziczy po obiekcie proto Person
 // To połączenie trzeba utworzyć tutaj, zanim dodamy metody do studenta, ponieważ w tym momencie ten Obiekt.create() zwróci pusty obiekt. Jeżeli było by to po stworzeniu metody introduce, object.create() nadpisało by tą metodę.
@@ -399,4 +401,72 @@ Student.prototype.introduce = function () {
 const mike = new Student('Mike', 2020, 'Computer Science');
 mike.introduce();
 console.log(mike);
-// Aby połączyć dwa prototypowe obiekty manulanie, uzywamy Object.create()
+
+mike.calcAge();
+
+// Prototype chain tutaj: szuka metody calcAge() w Obiekcie mike->Student.prototype->Person.prototype. Dalej jest Object.prototype->null.
+// Dzięki dziedziczeniu jest możliwe wywołanie metody która jest własnością Person.prototype, na obiekcie Student i to zadziała.
+
+console.log(mike instanceof Student);
+console.log(mike instanceof Person);
+console.log(mike instanceof Object);
+console.log(mike);
+
+// Musimy ustawic konstruktora na studenta, ponieważ JS myśli, że to person przez to, że ustawiamy własciwosc prototupu studenta za pomoca object.create() przez to konstruktor student.prototype jest dalej person.
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor);
+
+console.log(mike);
+*/
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+/* 
+1. Use a constructor function to implement an Electric Car (called EV) as a CHILD "class" of Car. Besides a make and current speed, the EV also has the current battery charge in % ('charge' property);
+2. Implement a 'chargeBattery' method which takes an argument 'chargeTo' and sets the battery charge to 'chargeTo';
+3. Implement an 'accelerate' method that will increase the car's speed by 20, and decrease the charge by 1%. Then log a message like this: 'Tesla going at 140 km/h, with a charge of 22%';
+4. Create an electric car object and experiment with calling 'accelerate', 'brake' and 'chargeBattery' (charge to 90%). Notice what happens when you 'accelerate'! HINT: Review the definiton of polymorphism 😉
+
+DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
+
+GOOD LUCK 😀
+*/
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`'${this.make}' going at ${this.speed} km/h`);
+};
+
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.charge = chargeTo;
+};
+
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.charge--;
+  console.log(
+    `${this.make} going at ${this.speed}, with a charge of ${this.charge}%`
+  );
+};
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.chargeBattery(90);
+console.log(tesla.charge);
+tesla.brake();
+tesla.accelerate();
