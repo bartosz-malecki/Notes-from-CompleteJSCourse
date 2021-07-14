@@ -390,7 +390,9 @@ const Student = function (firstName, birthYear, course) {
 
 // Linking prototypes
 // Aby połączyć dwa prototypowe obiekty manulanie, uzywamy Object.create().
+
 Student.prototype = Object.create(Person.prototype);
+
 // Teraz obiekt prototypowy studenta, dziedziczy po obiekcie proto Person
 // To połączenie trzeba utworzyć tutaj, zanim dodamy metody do studenta, ponieważ w tym momencie ten Obiekt.create() zwróci pusty obiekt. Jeżeli było by to po stworzeniu metody introduce, object.create() nadpisało by tą metodę.
 
@@ -431,7 +433,7 @@ console.log(mike);
 DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
 
 GOOD LUCK 😀
-*/
+
 
 const Car = function (make, speed) {
   this.make = make;
@@ -467,7 +469,109 @@ tesla.acceleration();
 tesla.chargeBattery(90);
 console.log(tesla);
 tesla.brake();
+<<<<<<< HEAD
 tesla.acceleration();
 tesla.acceleration();
 tesla.acceleration();
 tesla.acceleration();
+=======
+tesla.accelerate();
+*/
+
+///////////////////////////////////////
+// Inheritance between "Classes": ES6
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hej ${this.fullName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  static hey() {
+    console.log(`Hey there`);
+  }
+}
+
+// Aby zaimplementować dziedziczenie w ES6 potrzbujemy słowa kluczowego extends oraz funkcji super (funkcja kontruktora klasy nadrzędnej, idea ta samo co w constuctor functions z tym, że wszystko dzieje sie automatycznie)
+class StudentCL extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    // Musi się to wydarzyć na początku!!! Bo funkcja super odpowiada za utworzenie this w tej subklasie.
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(
+      `I'm ${2037 - this.birthYear} years old, but I feel like ${
+        2037 - this.birthYear + 10
+      }`
+    );
+  }
+}
+
+// Jeżeli nie potrzebujemy żadnych nowych właściwości, to nie musimy pisać tego constructora w klasie potomnej.
+const martha = new StudentCL('Martha Jones', 2012, 'Computer Science');
+martha.introduce();
+martha.calcAge();
+
+// Łańcuch prototypów został faktycznie utworzony automatycznie za pomocą słowa kluczowego extends.
+
+///////////////////////////////////////
+// Inheritance between "Classes": Object.create()
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const jay = Object.create(StudentProto);
+jay.init('Jay', 2010, 'Computer Science');
+jay.introduce();
+jay.calcAge();
+
+// Wszystko co tu robimy to łączenie ze sobą obiektów, gdzie niektóre służą innym jako prototypy.
+>>>>>>> 090a38fc6807bfd38b3c3acab9e017bd5263ba9d
+
