@@ -469,7 +469,7 @@ tesla.acceleration();
 tesla.chargeBattery(90);
 console.log(tesla);
 tesla.brake();
-<<<<<<< HEAD
+
 tesla.acceleration();
 tesla.acceleration();
 tesla.acceleration();
@@ -573,5 +573,3 @@ jay.introduce();
 jay.calcAge();
 
 // Wszystko co tu robimy to łączenie ze sobą obiektów, gdzie niektóre służą innym jako prototypy.
->>>>>>> 090a38fc6807bfd38b3c3acab9e017bd5263ba9d
-
