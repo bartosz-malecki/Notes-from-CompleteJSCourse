@@ -581,12 +581,34 @@ class Account {
     this.locale = navigator.language;
   }
 
+  // Public interface
   deposit(val) {
     this.movements.push(val);
   }
   withdraw(val) {
     this.deposit(-val);
   }
+
+  approveLoan(val) {
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this.approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
 }
 
 const acc1 = new Account('Jonas', 'EUR', 1111);
+
+// Ręczne manipulowanie właściwościami
+// acc1.movements.push(250);
+// acc1.movements.push(-140)
+
+// Znacznie lepszy sposób, poprzez API
+acc1.deposit(250);
+acc1.withdraw(140);
+
+// Hermetyzacja oznacza zachowanie prywatności niektórych właściwości i metod wewnątrz klasy, tak aby nie były dostepne z zewnątrz, a reszta metod są ujawniane jako Public Interface, którym możemy wywołać API. Ma to na celu zapobieganie przypadkowemu manipulowaniu kodem spoza klasy, lub manipulowaniem danymi wewnątrz klasy. Również jest to po to bo gdy API składa sie z kilku małych publicznych metod, to możemy z większą pewnościa zmieniać wszystkie inne metody wewnętrzne, ponieważ mamy pewność, że kod wewnętrzny nie polega na tych prywatnych metodach.
