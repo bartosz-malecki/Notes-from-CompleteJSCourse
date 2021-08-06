@@ -580,25 +580,31 @@ class Account {
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
-    this.pin = pin;
-    this.movements = [];
+    // Protected property    (chronione, nie prywatne)
+    this._pin = pin; // dawanie _xxx to konwencja która mówi programistom, że ta właściwośc nie powinna byc ruszana poza klasą
+    this._movements = [];
     this.locale = navigator.language;
   }
 
   // Public interface
+  getMovements() {
+    return this._movements;
+  }
+
   deposit(val) {
-    this.movements.push(val);
+    this._movements.push(val);
   }
   withdraw(val) {
     this.deposit(-val);
   }
 
-  approveLoan(val) {
+  _approveLoan(val) {
+    // pokazuje, że ta metoda nie powinna byc częscią API, a reszta tak
     return true;
   }
 
   requestLoan(val) {
-    if (this.approveLoan(val)) {
+    if (this._approveLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved`);
     }
@@ -614,5 +620,7 @@ const acc1 = new Account('Jonas', 'EUR', 1111);
 // Znacznie lepszy sposób, poprzez API
 acc1.deposit(250);
 acc1.withdraw(140);
+acc1.requestLoan(1000);
+// acc1._approveLoan(1000);
 
 // Hermetyzacja oznacza zachowanie prywatności niektórych właściwości i metod wewnątrz klasy, tak aby nie były dostepne z zewnątrz, a reszta metod są ujawniane jako Public Interface, którym możemy wywołać API. Ma to na celu zapobieganie przypadkowemu manipulowaniu kodem spoza klasy, lub manipulowaniem danymi wewnątrz klasy. Również jest to po to bo gdy API składa sie z kilku małych publicznych metod, to możemy z większą pewnościa zmieniać wszystkie inne metody wewnętrzne, ponieważ mamy pewność, że kod wewnętrzny nie polega na tych prywatnych metodach.
