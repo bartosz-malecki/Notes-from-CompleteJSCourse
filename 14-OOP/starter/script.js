@@ -85,7 +85,7 @@ console.log(bartek);
 // 3. {} is linked to prototype.
 // 4. function automatically return {}
 
-// Podsumowując - wywołujemy funkcję konstruktora z oberatorem new, dlatego od razu jest tworzony nowy pusty obiekt. Następnie wywołuje się funkcja i this jest przypisane do pustego obiektu. Potem w funkcji ustawiamy nowe właściwości dla tego obiektu i dajemy im takie same nazwy jak parametry jakie przekazujemy funkcji. Na końcu funkcji this ma te dwie właściwości i obiekt jest automatycznie zwracany z funkcji.
+// Podsumowując - wywołujemy funkcję konstruktora z operatorem new, dlatego od razu jest tworzony nowy pusty obiekt. Następnie wywołuje się funkcja i this jest przypisane do pustego obiektu. Potem w funkcji ustawiamy nowe właściwości dla tego obiektu i dajemy im takie same nazwy jak parametry jakie przekazujemy funkcji. Na końcu funkcji this ma te dwie właściwości i obiekt jest automatycznie zwracany z funkcji.
 
 const jonas = new Person('Jonas', 1985);
 const jacob = new Person('Jacob', 2000);
@@ -124,14 +124,15 @@ console.log(bartek.hasOwnProperty('species'));
 ////           Prototype Chain i Inheritance
 // Każdy obiekt ma swój prototyp, więc Person.prototype też musi mieć i jest nim Object.prototype. Powstaje on gdy tylko tworzymy nowy obiekt. {...} = new Object(...).
 // Cała seria takich powiązań obiektów nazywa się Prototype Chain (coś jak scope chain), a Object.prototype jest zwykle na szczycie łańcucha, co oznacza, że jego prototyp jest pusty - zatem jego __proto__: null (oznacza koniec łancucha protorypów).
-// Ilekroć JS próbuje znaleźć określoną właściwośc lub metodę w określonym obiekcjie, będzie szukał nastęonego prototypu w łańcuchu, czy może go tam znaleźć.
+// Ilekroć JS próbuje znaleźć określoną właściwośc lub metodę w określonym obiekcie, będzie szukał następnego prototypu w łańcuchu, czy może go tam znaleźć.
 
 console.log(bartek.__proto__);
 // Object.prototype (top of prototype chain)
 console.log(bartek.__proto__.__proto__);
 console.log(bartek.__proto__.__proto__.__proto__);
 
-const arr = [1, 2, 3, 4, 5, 6, 78, 8, 1, 2, 3]; // new Array === []
+const arr = [1, 2, 3, 4, 5, 6, 78, 8, 1, 2, 3]; 
+new Array === []
 console.log(arr.__proto__); // znajdują się tu wszystkie metody.
 // Własnośc .prototype będzie prototypem wszystkich obiektów utworzonych przez tego konstruktora.
 console.log(arr.__proto__ === Array.prototype);
@@ -261,7 +262,7 @@ const walter = new PersonCl('Walter White', 1965);
 // Korzystanie z funkcji konstruktora czy classes to wybór osobisty wg preferencji. Klasy są bardziej spójne, cały kod znajduje sie w jednym bloku, a w konstruktorze funkcji troche jest bałagan i można sie pogubić.
 
 ////           Setters and Getters
-// Każdy obiekt może mieć własności specjalne setter i getter. (Normalne są zwane własnościami danych.) Są to metody pobierające i ustawiające które są funkcjami i pobierają i ustawiają wartośc, ale na zewnatrzą wyglądają jak normalne właściwości.
+// Każdy obiekt może mieć własności specjalne setter i getter. (Normalne są zwane własnościami danych.) Są to metody pobierające i ustawiające które są funkcjami: pobierają i ustawiają wartość, ale na zewnatrz wyglądają jak normalne właściwości.
 
 const account = {
   owner: 'Jonas',
@@ -276,8 +277,10 @@ const account = {
   },
 };
 console.log(account.latest); // nie wywołujemy tego jako metody latest(), tylko piszemy tak jakby to była zwykła właściwość.
+
 // przydatne gdy chcemy przeczytać cos jako właściwośc ale nadal trzeba wykonać jakieś obliczenia wcześniej.
-// gdy mamy getter, letter nie jest wymagany jeśli chodzi o tą samą właściwość. Więc wystarczy jedno albo drugie.
+// gdy mamy getter, setter nie jest wymagany jeśli chodzi o tą samą właściwość. Więc wystarczy jedno albo drugie.
+// getter pobiera wartość z obiektu, setter ustawia wartość którą pobiera z zewnatrz.
 
 account.latest = 666; // ustawiamy nową wartośc jak dla właściości a nie metody
 console.log(account.movement);
@@ -389,7 +392,7 @@ const Student = function (firstName, birthYear, course) {
 };
 
 // Linking prototypes
-// Aby połączyć dwa prototypowe obiekty manulanie, uzywamy Object.create().
+// Aby połączyć dwa prototypowe obiekty manulanie, używamy Object.create().
 
 Student.prototype = Object.create(Person.prototype);
 
@@ -414,7 +417,7 @@ console.log(mike instanceof Person);
 console.log(mike instanceof Object);
 console.log(mike);
 
-// Musimy ustawic konstruktora na studenta, ponieważ JS myśli, że to person przez to, że ustawiamy własciwosc prototupu studenta za pomoca object.create() przez to konstruktor student.prototype jest dalej person.
+// Musimy ustawić konstruktora na studenta, ponieważ JS myśli, że to person, przez to, że ustawiamy właściwość prototupu studenta za pomoca object.create() przez to konstruktor student.prototype jest dalej person.
 Student.prototype.constructor = Student;
 console.dir(Student.prototype.constructor);
 
@@ -477,7 +480,7 @@ tesla.acceleration();
 =======
 tesla.accelerate();
 */
-
+/*
 ///////////////////////////////////////
 // Inheritance between "Classes": ES6
 
@@ -540,7 +543,7 @@ martha.introduce();
 martha.calcAge();
 
 // Łańcuch prototypów został faktycznie utworzony automatycznie za pomocą słowa kluczowego extends.
-
+*/
 /*
 ///////////////////////////////////////
 // Inheritance between "Classes": Object.create()
@@ -576,6 +579,9 @@ jay.calcAge();
 // Wszystko co tu robimy to łączenie ze sobą obiektów, gdzie niektóre służą innym jako prototypy.
 */
 
+/*
+///////////////////////////////////////
+// Hermetyzacja
 class Account {
   constructor(owner, currency, pin) {
     this.owner = owner;
@@ -623,4 +629,79 @@ acc1.withdraw(140);
 acc1.requestLoan(1000);
 // acc1._approveLoan(1000);
 
+
 // Hermetyzacja oznacza zachowanie prywatności niektórych właściwości i metod wewnątrz klasy, tak aby nie były dostepne z zewnątrz, a reszta metod są ujawniane jako Public Interface, którym możemy wywołać API. Ma to na celu zapobieganie przypadkowemu manipulowaniu kodem spoza klasy, lub manipulowaniem danymi wewnątrz klasy. Również jest to po to bo gdy API składa sie z kilku małych publicznych metod, to możemy z większą pewnościa zmieniać wszystkie inne metody wewnętrzne, ponieważ mamy pewność, że kod wewnętrzny nie polega na tych prywatnych metodach.
+
+// Niedługo wdroży się tzw class fields i class methods.
+
+// 1) Public fields - Możemy tłumaczyc pole jako właściwość która będzie występować we wszystkich instancjach.
+// 2) Private fields - pola gdzie właściwości są niedostępne z zewnątrz
+// 3) Public methods - tak jak wczesniej wyjaśnione z API
+// 4) Private methods
+// Są jeszcze wersje static
+
+// Na podstawie przykładu wyżej:
+class Account {
+  // 1)  Public fields (dostępne w instances, ale nie w prototypach)
+  locale = navigator.language;
+
+  // 2) Private fields (instances)
+  #movements = [];
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+  }
+
+  // 3) Public methods
+
+  // Public interface
+  getMovements() {
+    return this.#movements;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  requestLoan(val) {
+    // if (this.#approveLoan(val)) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+
+  static helper() {
+    console.log(`helper`);
+  }
+  // 4) Private methods
+  // #approveLoan(val) {
+  _approveLoan(val) {
+    return true;
+  }
+}
+
+const acc1 = new Account('Jonas', 'EUR', 1111);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+console.log(acc1);
+
+// console.log(acc1.#movements); // dostajemy błąd, nie mamy dostępu
+
+// pin tak jak movements, chcemy aby był też prywatny, jednak sytuacja jest troche inna, ponieważ definiujemy pin jako wartość wejściowa dla konstruktora, a nie możemy tworzyć pola w konstruktorze, więc musi zostać na miejscu (poza jakąkolwiek metodą). Towrzymy więc pustą zmienną z # w polu, i przedefiniowujemy ją w konstruktorze.
+
+// console.log(acc1.#pin); // nie mamy również dostępu
+// console.log(acc1.#approveLoan(100)); // metody nie są jeszcze wdrożone
+
+// Metody statyczne nie będą dostępne we wszystkich instancjach, tylko w samych klasach.
+Account.helper();
+*/
