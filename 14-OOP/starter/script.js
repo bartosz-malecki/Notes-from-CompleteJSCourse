@@ -629,7 +629,7 @@ acc1.withdraw(140);
 acc1.requestLoan(1000);
 // acc1._approveLoan(1000);
 
-
+*/
 // Hermetyzacja oznacza zachowanie prywatności niektórych właściwości i metod wewnątrz klasy, tak aby nie były dostepne z zewnątrz, a reszta metod są ujawniane jako Public Interface, którym możemy wywołać API. Ma to na celu zapobieganie przypadkowemu manipulowaniu kodem spoza klasy, lub manipulowaniem danymi wewnątrz klasy. Również jest to po to bo gdy API składa sie z kilku małych publicznych metod, to możemy z większą pewnościa zmieniać wszystkie inne metody wewnętrzne, ponieważ mamy pewność, że kod wewnętrzny nie polega na tych prywatnych metodach.
 
 // Niedługo wdroży się tzw class fields i class methods.
@@ -664,9 +664,11 @@ class Account {
 
   deposit(val) {
     this.#movements.push(val);
+    return this;
   }
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
 
   requestLoan(val) {
@@ -674,6 +676,7 @@ class Account {
     if (this._approveLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved`);
+      return this;
     }
   }
 
@@ -704,4 +707,52 @@ console.log(acc1);
 
 // Metody statyczne nie będą dostępne we wszystkich instancjach, tylko w samych klasach.
 Account.helper();
-*/
+
+// Chaining
+acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000);
+
+// trzeba w metodach zwrócić this, bo bez tego wskazuje na undefined, a tak to wskaże nam dany obiekt. Ma to sens w przypadku metod które ustawiają jakąś wartość.
+console.log(acc1.getMovements());
+
+/////////   Podsumowanie klas
+
+class Studend extends Person {
+  uniweristy = 'University of Lisbon'; // public field (podobne do właściwości, dostępne dla każdej instancji utworzonej przez tą klasę)
+  #studyHours; // private fields (podobnie jak wyżej, ale nie dostępne poza klasą)
+  #course;
+  static numSubjects = 10; // static public field (dostępne tylko w klasie)
+
+  constructor(fullName, birthYear, startYear, course) {
+    // wywoływana przez new operator obowiązkowa w każdej normalnej klasie, można ominąć w potomnej gdy mamy te same parametry.
+    super(fullName, birthYear); // wywołanie parametrów klasy nadrzędnej, obowiązkowe gdy piszemy klasę potomną, więc kiedy używamy sk extends.
+    this.startYear = startYear; // właściwość instancji, podobnie jak public field, dostępna w każdym utworzonym obiekcie, różnica, że ustawiamy na podstawie danych wejściowych konstruktora. Są bardziej unikalne dla każdego obiektu, a publioc fields wspólne dla wszystkich obiektów.
+    this.#course = course; // przedefiniowanie private field. Pole powinno być unikalne dla każdego ucznia. Twożymy prywatne pola bez wartości a potem w konstruktorze przedefiniowujemy je
+  }
+  // public method
+  introduce() {
+    console.log(`I study ${this.#course} at ${this.uniweristy}`);
+  }
+  // odniesienie do metody prywatnej
+  study(h) {
+    this.#makeCoffe();
+    this.#studyHours += h;
+  }
+  // metoda prywatna
+  #makeCoffe() {
+    return 'Here is a coffe for U';
+  }
+  // getter method, są po to aby uzyskać wartość z obiektu pisząc właściwość, zamiast metody
+  get testScore() {
+    return this._testScore;
+  }
+  // ustawia jakąś wartość. Gdy jest już zdefiniowana w funkcji konstuktora to tworzymy nową właścowośc z _zxxx
+  set testScore(score) {
+    this._testScore = score < 20 ? score : 0;
+  }
+  // metoda statyczna, dostępna tylko w klasie, więc nie może usyskac dostępu do natychmiastowych właściwości ani metod, tylko do statycznych. Używane jako pomocnicze dla klasy.
+  static printCV() {
+    console.log(`There are ${this.numSubjects} subjects`);
+  }
+}
+
+const student = new Student('Jonas', 2020, 2037, 'Medicine'); // tworzenie nowego obiektu
