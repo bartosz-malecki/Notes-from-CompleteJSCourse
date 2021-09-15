@@ -629,7 +629,7 @@ acc1.withdraw(140);
 acc1.requestLoan(1000);
 // acc1._approveLoan(1000);
 
-*/
+
 // Hermetyzacja oznacza zachowanie prywatności niektórych właściwości i metod wewnątrz klasy, tak aby nie były dostepne z zewnątrz, a reszta metod są ujawniane jako Public Interface, którym możemy wywołać API. Ma to na celu zapobieganie przypadkowemu manipulowaniu kodem spoza klasy, lub manipulowaniem danymi wewnątrz klasy. Również jest to po to bo gdy API składa sie z kilku małych publicznych metod, to możemy z większą pewnościa zmieniać wszystkie inne metody wewnętrzne, ponieważ mamy pewność, że kod wewnętrzny nie polega na tych prywatnych metodach.
 
 // Niedługo wdroży się tzw class fields i class methods.
@@ -723,10 +723,16 @@ class Studend extends Person {
   static numSubjects = 10; // static public field (dostępne tylko w klasie)
 
   constructor(fullName, birthYear, startYear, course) {
-    // wywoływana przez new operator obowiązkowa w każdej normalnej klasie, można ominąć w potomnej gdy mamy te same parametry.
-    super(fullName, birthYear); // wywołanie parametrów klasy nadrzędnej, obowiązkowe gdy piszemy klasę potomną, więc kiedy używamy sk extends.
-    this.startYear = startYear; // właściwość instancji, podobnie jak public field, dostępna w każdym utworzonym obiekcie, różnica, że ustawiamy na podstawie danych wejściowych konstruktora. Są bardziej unikalne dla każdego obiektu, a publioc fields wspólne dla wszystkich obiektów.
-    this.#course = course; // przedefiniowanie private field. Pole powinno być unikalne dla każdego ucznia. Twożymy prywatne pola bez wartości a potem w konstruktorze przedefiniowujemy je
+    // funk. kontr. wywoływana przez new operator obowiązkowa w każdej normalnej klasie, można ominąć w potomnej gdy mamy te same parametry.
+
+    super(fullName, birthYear); 
+    // wywołanie parametrów klasy nadrzędnej, obowiązkowe gdy piszemy klasę potomną, więc kiedy używamy s-k extends.
+    
+    this.startYear = startYear; 
+    // właściwość instancji, podobnie jak public field, dostępna w każdym utworzonym obiekcie, różnica, że ustawiamy na podstawie danych wejściowych konstruktora. Są bardziej unikalne dla każdego obiektu, a publioc fields wspólne dla wszystkich obiektów.
+    
+    this.#course = course; 
+    // przedefiniowanie private field. Pole powinno być unikalne dla każdego ucznia. Twożymy prywatne pola bez wartości a potem w konstruktorze przedefiniowujemy je
   }
   // public method
   introduce() {
@@ -756,3 +762,72 @@ class Studend extends Person {
 }
 
 const student = new Student('Jonas', 2020, 2037, 'Medicine'); // tworzenie nowego obiektu
+*/
+
+///////////////////////////////////////
+// Coding Challenge #4
+
+/* 
+1. Re-create challenge #3, but this time using ES6 classes: create an 'EVCl' child class of the 'CarCl' class
+2. Make the 'charge' property private;
+3. Implement the ability to chain the 'accelerate' and 'chargeBattery' methods of this class, and also update the 'brake' method in the 'CarCl' class. They experiment with chining!
+
+DATA CAR 1: 'Rivian' going at 120 km/h, with a charge of 23%
+
+GOOD LUCK 😀
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `'${this.make}' going at ${this.speed} km/h, with a charge ${
+        this.#charge
+      }%`
+    );
+    return this;
+  }
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+}
+
+const rivian = new EVCl('Rivian', 120, 23);
+
+rivian.chargeBattery(90);
+rivian.accelerate().brake().accelerate().accelerate();
