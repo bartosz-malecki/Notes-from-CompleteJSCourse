@@ -10,3 +10,17 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+
+// Pobieranie geolokacji
+// funkcja przyjmuje dane wejsciowe do funkcji zwrotnych, jedna z nich to sukcesu (gdy przeglądarka uzyska współrzędne bieżącej lokalizacji), a druga błędu (gdy wystąpi błąd przy pobieraniu)
+if (navigator.geolocation)
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      const latitude = position.coords.latitude;
+      const { longitude } = position.coords; // zastosowanie destrukturyzacji. Tworzy się zmienna longiute na podstawie właściwości longitude tego obiektu
+      console.log(`https://www.google.pl/maps/@${latitude},${longitude}`);
+    },
+    function () {
+      alert('Could not get your position');
+    }
+  );
