@@ -11,6 +11,18 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+class App {
+  constructor() {}
+
+  _getPosition() {}
+
+  _loadMap(position) {}
+
+  _showForm() {}
+
+  _toggleElevationField() {}
+}
+
 let map, mapEvent;
 // Pobieranie geolokacji
 // funkcja przyjmuje dane wejsciowe do funkcji zwrotnych, jedna z nich to sukcesu (gdy przeglądarka uzyska współrzędne bieżącej lokalizacji), a druga błędu (gdy wystąpi błąd przy pobieraniu)
