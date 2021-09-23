@@ -38,8 +38,17 @@ if (navigator.geolocation)
     });
 
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      e.preventDefault(); // by strona się nie przeładowywyała po wysłaniu formularza
+
+      // Clear input fields
+      inputDistance.value =
+        inputDuration.value =
+        inputCadence.value =
+        inputElevation.value =
+          '';
       console.log(mapEvent);
+
+      // Display marker
       const { lat, lng } = mapEvent.latlng;
       // tworzy marker, ustawia go na mapie, tworzy wyskakujące okienko i wiąże  je z markerem
       L.marker([lat, lng])
@@ -57,3 +66,8 @@ if (navigator.geolocation)
         .openPopup();
     }); // metoda do evenlistenera wbudowana w lefleat, bedziemy jej używać zamiast EL.
   });
+
+inputType.addEventListener('change', function () {
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
+  inputCadence.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
+});

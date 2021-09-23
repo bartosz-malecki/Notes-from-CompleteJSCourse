@@ -47,3 +47,10 @@
 ////////////// ARCHITECTURE
 
 // Podobnie jak flowchartsy, nie potrzebujemy ostatecznej architektury przed wdrożeniem, abysmy mogli poeksperymentować, pobawić się kodem. W tym projekcie to omijamy na początku.
+
+// Architektura polega na nadaniu projektowi struktury, a potem możemy rozwijać funkcjonalność.
+// W tym projekcie główna architektura będzie pochodzić z klas i obiektów.
+// Główna klasa będzie posiadać wspólne części dystans, czas i lokalizacja, a dzieci dodatkowo cadence, pace speed i elevation gain.
+// Każda klasa jest reprezentowana przez takie pudełko jak w osobnych plikach, w górnej części właściwości a w dolnej metody.
+// Zdarzenia które mamy to: ładowanie strony, otrzymanie pozycji z API geolokalizacji, kliknięcie na mape, zmiana rodzaju treningu i zatwierdzenie formularza. Musimy stworzyc funkcje które będą je obsługiwać.
+// W tym celu tworzymy dużą klasę App, która będzie przechowywać wszystkie te funkcje jako metody.
