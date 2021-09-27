@@ -12,74 +12,82 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
 class App {
-  constructor() {}
+  #map;
+  #mapEvent;
 
-  _getPosition() {}
+  // wywoływuje się od razu po utworzeniu nowego obiektu z tej klasy
+  constructor() {
+    this._getPosition();
+    form.addEventListener('submit', this._newWorkout.bind(this)); // funkcja zwrotna, trzeba ręcznie ustawic this na ten obiekt
+    inputType.addEventListener('change', this._toggleElevationField); // funkcja nie używa słowa kluczowego więc nie musimy przypisywać
+  }
 
-  _loadMap(position) {}
+  _getPosition() {
+    if (navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(
+        this._loadMap.bind(this), // jest to funkcja zwrotna więc sami jej nie wywołujemy. this jest undefined, więc musimy ręcznie ustawić
+        function () {
+          alert('Could not get your position');
+        }
+      );
+  }
 
-  _showForm() {}
-
-  _toggleElevationField() {}
-}
-
-let map, mapEvent;
-// Pobieranie geolokacji
-// funkcja przyjmuje dane wejsciowe do funkcji zwrotnych, jedna z nich to sukcesu (gdy przeglądarka uzyska współrzędne bieżącej lokalizacji), a druga błędu (gdy wystąpi błąd przy pobieraniu)
-if (navigator.geolocation)
-  navigator.geolocation.getCurrentPosition(function (position) {
+  _loadMap(position) {
     const latitude = position.coords.latitude;
-    const { longitude } = position.coords; // zastosowanie destrukturyzacji. Tworzy się zmienna longiute na podstawie właściwości longitude tego obiektu
-    // console.log(`https://www.google.pl/maps/@${latitude},${longitude}`);
+    const { longitude } = position.coords;
 
     const coords = [latitude, longitude];
-
-    map = L.map('map').setView(coords, 13); // koordynaty, a drugi to przybliżenie. Zapisujemy wartości w zmiennej abysmy mogli dodać do niego eventlistener. Obiekt map jest wygenerowany przez lefleat
+    console.log(this);
+    this.#map = L.map('map').setView(coords, 13);
 
     // kafelki z których zrobione są mapy, możemy wybierać różne style
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    }).addTo(this.#map);
 
     // Handling clicks on map
-    map.on('click', function (mapE) {
-      mapEvent = mapE;
-      form.classList.remove('hidden');
-      inputDistance.focus(); // dla wygody użytkownika
-    });
+    this.#map.on('click', this._showForm.bind(this));
+  }
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault(); // by strona się nie przeładowywyała po wysłaniu formularza
+  _showForm(mapE) {
+    this.#mapEvent = mapE;
+    form.classList.remove('hidden');
+    inputDistance.focus();
+  }
 
-      // Clear input fields
-      inputDistance.value =
-        inputDuration.value =
-        inputCadence.value =
-        inputElevation.value =
-          '';
-      console.log(mapEvent);
+  _toggleElevationField() {
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+  }
 
-      // Display marker
-      const { lat, lng } = mapEvent.latlng;
-      // tworzy marker, ustawia go na mapie, tworzy wyskakujące okienko i wiąże  je z markerem
-      L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup(
-          L.popup({
-            maxWidth: 250,
-            minWidth: 100,
-            autoClose: false,
-            closeOnClick: false,
-            className: 'running-popup',
-          })
-        )
-        .setPopupContent('Workout')
-        .openPopup();
-    }); // metoda do evenlistenera wbudowana w lefleat, bedziemy jej używać zamiast EL.
-  });
+  _newWorkout(e) {
+    e.preventDefault();
 
-inputType.addEventListener('change', function () {
-  inputElevation.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
-  inputCadence.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
-});
+    // Clear input fields
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+
+    // Display marker
+    const { lat, lng } = this.#mapEvent.latlng;
+
+    L.marker([lat, lng])
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: 'running-popup',
+        })
+      )
+      .setPopupContent('Workout')
+      .openPopup();
+  }
+}
+
+const app = new App();
