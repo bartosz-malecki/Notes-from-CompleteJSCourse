@@ -36,6 +36,7 @@ class Running extends Workout {
     return this.pace;
   }
 }
+
 class Cycling extends Workout {
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);
@@ -54,7 +55,7 @@ class Cycling extends Workout {
 // console.log(run1, cyc1);
 
 ///////////////////////////////////
-// APPLICATION ARCHOTECTURE
+// APPLICATION ARCHITECTURE
 class App {
   #map;
   #mapEvent;
@@ -106,16 +107,39 @@ class App {
   }
 
   _newWorkout(e) {
+    const validInputs = (...inputs) =>
+      inputs.every(inp => Number.isFinite(inp)); // sprawdza czy dane wejściowe są  liczbą skończoną
+
     e.preventDefault();
 
-    // Clear input fields
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
+    // Pobierz dane z formularza
+    const type = inputType.value;
+    const distance = +inputDistance.value; // konwertowanie na liczbę
+    const duration = +inputDuration.value;
 
-    // Display marker
+    // Jeżeli trening jest biegiem, utwórz obiekt z bieganiem
+    if (type === 'running') {
+      const cadence = +inputCadence.value;
+      // Sprawdź czy dane są prawidłowe
+      if (
+        // !Number.isFinite(distance) ||
+        // !Number.isFinite(duration) ||
+        // !Number.isFinite(cadence)
+        !validInputs(distance, duration, cadence)
+      )
+        return alert('Inputs have to be positive numbers');
+    }
+
+    // Jeżeli trening jest jazdą na rowerze, utwórz obiekt z jazdą na rowerze.
+    if (type === 'cycling') {
+      const elevation = +inputElevation.value;
+      if (!validInputs(distance, duration, elevation))
+        return alert('Inputs have to be positive numbers');
+    }
+
+    // Dodaj obiekt do tablicy treningów
+
+    // Wyświetl trening na mapie jako marker
     const { lat, lng } = this.#mapEvent.latlng;
 
     L.marker([lat, lng])
@@ -131,6 +155,17 @@ class App {
       )
       .setPopupContent('Workout')
       .openPopup();
+
+    // Wyświetl trening na liście
+
+    // Clear input fields
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+
+    // Display marker
   }
 }
 
