@@ -79,7 +79,13 @@ class App {
 
   // wywoływuje się od razu po utworzeniu nowego obiektu z tej klasy
   constructor() {
+    // Get user's position
     this._getPosition();
+
+    // Get data from lokal storage
+    this._getLocalStorage();
+
+    // Event handlers
     form.addEventListener('submit', this._newWorkout.bind(this)); // funkcja zwrotna, trzeba ręcznie ustawic this na ten obiekt
     inputType.addEventListener('change', this._toggleElevationField); // funkcja nie używa słowa kluczowego więc nie musimy przypisywać
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -100,7 +106,7 @@ class App {
     const { longitude } = position.coords;
 
     const coords = [latitude, longitude];
-    console.log(this);
+
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
     // kafelki z których zrobione są mapy, możemy wybierać różne style
@@ -111,6 +117,10 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(work => {
+      this._renderMarkerWorkout(work);
+    });
   }
 
   _showForm(mapE) {
@@ -181,7 +191,6 @@ class App {
 
     // Dodaj obiekt do tablicy treningów
     this.#workouts.push(workout);
-    console.log(workout);
 
     // Wyświetl trening na mapie jako marker
     this._renderMarkerWorkout(workout);
@@ -191,6 +200,9 @@ class App {
 
     // Clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderMarkerWorkout(workout) {
@@ -262,14 +274,12 @@ class App {
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout'); // gdzie nie klikne w okno treningu, tam złapie cały trening
-    console.log(workoutEl);
 
-    if (!workoutEl) return;
+    if (!workoutEl) return; // ochrona, gdy nie ma - nic nie rób
 
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
-    console.log(workout);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
@@ -277,9 +287,32 @@ class App {
         duration: 1,
       },
     });
-    // using the public interface
-    // workout.click();
+  }
+  // using the public interface
+  // workout.click();
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // 1ar - klucz, 2ar - string który chcemy przechowywać i powiązany z kluczem. możemy przekształcamy obiekty w string
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts')); // przeciwieństwo tego co wyżej
+
+    if (!data) return; // ochrona, gdy nie ma - nic nie rób
+
+    this.#workouts = data; // gdy ładuje się aplikacja this.#workouts jest pusta, gdy jakieś dane były w lokal storage, wtedy znajdą się te z data. Przywracamy dane po wielu ładowaniach strony
+
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload(); // wbudowany obiekt z wieloma metodami, np jak tu przeładowanie strony
   }
 }
 
 const app = new App();
+
+console.log(app);

@@ -117,3 +117,6 @@
 //     inputElevation.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
 //     inputCadence.closest('.form__row').classList.toggle('form__row--hidden'); // wybiera najbliższego rodzica (querySel..wybiera dziecko)
 //   });
+
+// Local storage to bardzo mały i prosty interfejs API więc nie zaleca się używania go za dużo, tylko niewielkie ilości danych bo może to zamulić aplikacje.
+// Obiekty pochodzące z local storage nie odziedziczą wszystkich metod, które zrobiły wcześniej. Są po prostu zwykłymi obiektami, łańcuch prototypów znika. Stąd nie zadziała nam metoda clicks.
