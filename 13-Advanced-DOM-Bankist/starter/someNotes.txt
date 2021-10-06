@@ -1,0 +1,32 @@
+//////////// DOM
+
+- używany do interakcji interakcji JS z przeglądarką
+- możemy za pomocą JS tworzyć, modyfikować, usuwać elementy HTML, ustawiać style, klasy i atrybuty, nasłuchiwać i reagować na zdarzenia (eventy).
+- drzewo DOM jest generowane z dokumentu HTML, z którym możemy wchodzić w interakcję. drzewo to jest strukturą z nodes
+- DOM to bardzo złożony API, zawierający pełno metod i właściwości do interakcji z drzewem DOM np: .querySelector(), .addEventListener(, .createElement(), .innerHTML, .textContent, .children etc.
+
+Node to pojedyńczy węzeł z drzewa DOM.
+Każdy node jest reprezentowany w JS przez obiekt. Ten obiekt uzyskuje dostęp do specjalnych metod i właściwości node np. .textContent, .childNodes, .parentNodes, .cloneNode().
+
+Istnieją różne rodzaje nodes (węzłów). Node posiada kilka typów potomnych: element, text, comment, document.
+Kiedy w jakimś elemencie znajduje się tekst, wiemy, że dostaje własny node.. Następnie ten element dostaje dostęp do mnóstwa przydatnych właściwości jak .innerHTML, .closest(), .querySelector() etc.
+
+Text -> <p>Paragraph<p>
+Comment -> <!--Comment-->
+
+HTMLElement -> HTMLButtonElement / HTMLDivElement..
+
+Zasada jest taka, że wszystko co jest w HTML, trafia do DOM.
+Mamy specjalne typy dla przycisków, dla obrazów, linków itd. Każdy z nich ma unikalne właściwości. (np. src w obrazach czy anchor w linkach).
+
+To co stanowi, że wszystko to działa to DZIEDZICZENIE.
+Oznacza to, że wszystkie typy potomne otrzymują dostęp do metod i właściwości swoich typów nadrzędnych np. HTMLElement otrzyma dostep do wszystkiego z typy element. Pozatym uzyska dostęp również do wszystkiego z typu węzła, ponieważ to jego typ nadrzędny.
+
+W skrócie: DOM API jest podzielony na różne rodzaje nodes (węzłów). Każdy z tych nodes ma dostęp do różnych właściwości i metod, a niektóre z nich dziedziczą nawet więcej metod i właściwości od swoich przodków w tej organizacji.
+
+Typ Document użwyany jest cały czas do manipulacji, zawiera metody jak: .querySelector(), .createElement(), .getElementById().
+
+.querySelector() jest dostępny w typach element i w document.
+
+Istnieje specjalny typ node - EventTarget, który jest rodzicem zarówno node type, jak i window type (obiekt globalny).
+Dzieki niemu (ponieważ dziedziczy się) możemy wywoływać zdarzenia (.add/remove.EventListener) w każdym typie node w DOM API. NIGDY GO NIE TWORZYMY.
