@@ -29,3 +29,33 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+
+/////////////////////////////
+// Pobieranie elementów
+
+// dla tych specjalnych elementów nie trzeba pisać selectorów
+console.log(document.documentElement); // cały html
+console.log(document.head);
+console.log(document.body);
+
+const header = document.querySelector('.header'); // wybiera 1 element
+const allSelections = document.querySelectorAll('.section'); // wybiera wszystkie elementy
+console.log(allSelections); // zwraca NodeList (nie aktualizuje się live) z wszystkimi elementami wybranymi przez selektor
+
+document.getElementById('section--1'); // nie musimy miec selectora (. #)
+
+const allButtons = document.getElementsByTagName('button'); // wszystkie przyciski co są na stronie. zwraca HTMLCollection (aktualizuje sie automatycznie - live)
+console.log(allButtons);
+
+console.log(document.getElementsByClassName('btn')); // to samo co wyżej. Oba przydatne gdy potrzeba HTMLCollection
+
+// Tworzenie i dodawanie elementów
+// .insertAdjacentHTML // do tworzenia ruchów
+
+const message = document.createElement('div');
+message.classList.add('cookie-message');
+// message.textContent = `We use cookies for improved functionality`;
+message.innerHTML =
+  'We use cookies for improved functionality. <button class="btn btn--close-cookie"> Got it!</button>';
+
+header.prepend(message);
