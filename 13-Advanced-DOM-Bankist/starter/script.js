@@ -31,7 +31,7 @@ document.addEventListener('keydown', function (e) {
 });
 
 /////////////////////////////
-// Pobieranie elementów
+//////////// Pobieranie elementów
 
 // dla tych specjalnych elementów nie trzeba pisać selectorów
 console.log(document.documentElement); // cały html
@@ -49,13 +49,29 @@ console.log(allButtons);
 
 console.log(document.getElementsByClassName('btn')); // to samo co wyżej. Oba przydatne gdy potrzeba HTMLCollection
 
-// Tworzenie i dodawanie elementów
-// .insertAdjacentHTML // do tworzenia ruchów
+////////////////////
+///////////// Tworzenie i dodawanie elementów
+// .insertAdjacentHTML() // wrzuca string do html
 
 const message = document.createElement('div');
-message.classList.add('cookie-message');
-// message.textContent = `We use cookies for improved functionality`;
+// message.classList.add('cookie-message');
+// message.textContent = 'We use cookies for improved functionality. <button class="btn btn--close-cookie"> Got it!</button>;
 message.innerHTML =
   'We use cookies for improved functionality. <button class="btn btn--close-cookie"> Got it!</button>';
 
-header.prepend(message);
+// header.prepend(message); // wstawia element do kodu html jako pierwsze dziecko podanego elementu (tutaj header)
+header.append(message); // to samo co wyżej tylko jako ostatnie dziecko.
+// header.append(message.cloneNode(true)); // kopiuje i wstawia element w drugim miejscu (nie przenosi jak wyżej)
+
+// header.before(message); // wstawia element przed podanym elementem (jako rodzeństwo)
+// header.after(message); // to samo tylko, że na końcu
+
+////////////////////
+///////////// Usuwanie elementów
+
+document
+  .querySelector('.btn--close-cookie')
+  .addEventListener('click', function () {
+    message.remove(); // nowy sposób
+    // message.parentElement.removeChild(message); // stary sposób
+  });

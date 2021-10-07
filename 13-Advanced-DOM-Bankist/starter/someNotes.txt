@@ -30,3 +30,20 @@ Typ Document użwyany jest cały czas do manipulacji, zawiera metody jak: .query
 
 Istnieje specjalny typ node - EventTarget, który jest rodzicem zarówno node type, jak i window type (obiekt globalny).
 Dzieki niemu (ponieważ dziedziczy się) możemy wywoływać zdarzenia (.add/remove.EventListener) w każdym typie node w DOM API. NIGDY GO NIE TWORZYMY.
+
+//////////////////////////////
+
+element.insertAdjacentHTML(position, text); 
+(<!-- beforebegin -->
+<p>
+  <!-- afterbegin -->
+  foo
+  <!-- beforeend -->
+</p>
+<!-- afterend -->)
+
+Różnica między element.textContent a element.innerHTML jest taka, że textContent wstrzyknie nam sam tekst, a innerHTML zbuduje np przycisk jak w przykładzie.
+
+header.prepend(message);
+header.append(message); -> pierw wstawiono element na początek, a potem go przeniesio na koniec, dlatego pojawia się tylko raz (nie wstawiono go ponownie).
+Możemy więc używać metod prepend i append do wstawiania jak i przenoszenie elementów.
