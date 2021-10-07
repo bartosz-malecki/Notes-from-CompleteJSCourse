@@ -75,3 +75,20 @@ document
     message.remove(); // nowy sposób
     // message.parentElement.removeChild(message); // stary sposób
   });
+
+////////////////////
+///////////// Style
+
+message.style.backgroundColor = '#373784'; // zmienia coś w danym stylu
+message.style.width = '120%';
+
+console.log(message.style.color); // nie zadziała
+console.log(message.style.backgroundColor); // zadziała bo ustawiliśmy ręcznie za pomocą właściwości style
+
+console.log(getComputedStyle(message).color); // zadziała i pokaże prawdziwy kolor jaki pojawia się na stronie nawet jeśli nie zadeklarujemy go w CSS. Nawet jak sami nie zadeklarowaliśmy to pokaże wartość obliczoną przez przeglądarkę.
+console.log(getComputedStyle(message).height);
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 10 + 'px'; // ręczne zmienianie wartości
+
+document.documentElement.style.setProperty('--color-primary', 'red'); // zmiana wartości zmiennej CSS.
