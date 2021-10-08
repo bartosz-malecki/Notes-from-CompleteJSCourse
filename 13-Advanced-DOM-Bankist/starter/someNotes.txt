@@ -47,3 +47,18 @@ Różnica między element.textContent a element.innerHTML jest taka, że textCon
 header.prepend(message);
 header.append(message); -> pierw wstawiono element na początek, a potem go przeniesio na koniec, dlatego pojawia się tylko raz (nie wstawiono go ponownie).
 Możemy więc używać metod prepend i append do wstawiania jak i przenoszenie elementów.
+
+specjalny zestaw zaczynający są od data-(co chcemy).
+potem jak wywołujemy to to piszemy dataset.(co chcemy w camel case) np. data-number-version - x.dataset.numberVersion.
+Te specjalne atrybuty są przechowywane w obiekcie dataset
+
+/////////////////////
+getBoundingClientRect() jest relatywne do widocznego obszaru roboczego. Czyli, podaje koordy w zależności jak mamy wyscrollowany ekran (w jakim położeniu jest dany element)
+
+console.log('Current (X/Y)', window.pageXOffset, window.pageYOffset); wskazuje biężące przewijanie, jak bardzo odsunieci jesteśmy od góry strony
+
+console.log(
+    'height/width viewport',
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  ); wskazuje na wielkość otwartego okna 

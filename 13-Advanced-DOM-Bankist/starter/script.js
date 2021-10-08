@@ -30,6 +30,7 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+/*
 /////////////////////////////
 //////////// Pobieranie elementów
 
@@ -91,4 +92,72 @@ console.log(getComputedStyle(message).height);
 message.style.height =
   Number.parseFloat(getComputedStyle(message).height, 10) + 10 + 'px'; // ręczne zmienianie wartości
 
-document.documentElement.style.setProperty('--color-primary', 'red'); // zmiana wartości zmiennej CSS.
+document.documentElement.style.setProperty('--color-primary', 'orangered'); // zmiana wartości zmiennej CSS.
+
+////////////////////
+///////////// Atrybuty
+
+const logo = document.querySelector('.nav__logo');
+// Standard
+console.log(logo.alt); // zadziała na standardowych właściwościach
+console.log(logo.className);
+
+logo.alt = 'Beatiful logo'; // ustawianie
+
+// Niestandardowe
+console.log(logo.designer); // nie zadziałało bo to nie standardowa właściwość obrazu
+console.log(logo.getAttribute('designer')); // tak zadziała
+logo.setAttribute('company', 'Bankist'); // ustawianie
+
+console.log(logo.src); // daje nam wersje absolutną url  z http
+console.log(logo.getAttribute('src')); // daje wersję względną z samym url
+
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+////////////////////
+///////////// Atrybuty danych
+
+//specjalny zestaw zaczynający są od data-
+console.log(logo.dataset.versionNumber);
+
+////////////////////
+///////////// Klasy
+
+logo.classList.add('c', 'j');
+logo.classList.remove();
+logo.classList.toggle();
+logo.classList.contains(); // not includes
+// można dawać wiele wartości
+
+// tego nie używać bo nadpisze wszytskie klasy tą jedną!!
+logo.clasName = 'jonas';
+*/
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+
+  console.log(e.target.getBoundingClientRect());
+
+  // Scrolling
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // ); // otrzymujemy bezwzględne położenie elementu względem całej strony (bieżąca pozycja + bieżące przewijanie)
+
+  // Oldschoolowy przykład
+  // aby zaimplementować gładkie przewijanie musimy określić obiekt z left, top i zachowaniem
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  // Nowoczesny dla nowych przeglądarek
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
