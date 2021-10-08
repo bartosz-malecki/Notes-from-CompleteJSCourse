@@ -161,3 +161,14 @@ btnScrollTo.addEventListener('click', function (e) {
   // Nowoczesny dla nowych przeglądarek
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+const h1 = document.querySelector('h1');
+
+// h1.addEventListener('mouseenter', function (e) {
+//   alert('onmouseenter: great');
+// });
+
+// nasłuchiwanie bezpośrednio na elemencie
+h1.onmouseenter = function (e) {
+  // alert('onmouseenter: great');
+};

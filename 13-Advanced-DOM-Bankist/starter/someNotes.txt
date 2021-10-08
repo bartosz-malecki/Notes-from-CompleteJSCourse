@@ -62,3 +62,7 @@ console.log(
     document.documentElement.clientHeight,
     document.documentElement.clientWidth
   ); wskazuje na wielkość otwartego okna 
+
+  //////////
+  Event (zdarzenie) jest to sygnał generowany przez pewny DOM node, a sygnał oznacza, że coś sie stało - kliknięcie, najechanie itd. wszystko co się dzieje na naszej stronie generuje zdarzenie. 
+  Możemy to zdarzenie wymienić w kodzie za pomocą event listerenrów (detektorów zdarzeń), aby je obsłużyć jeśli chcemy.
